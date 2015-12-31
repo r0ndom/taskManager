@@ -23,12 +23,12 @@ public class SearchTaskController {
     @Autowired
     private TaskDao taskDao;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView showSearchPage() {
         return getMav(taskDao.findAll());
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/", method = RequestMethod.POST)
     public ModelAndView search(TaskSearchFilter filter) {
         return getMav(taskDao.search(filter));
     }
@@ -39,7 +39,7 @@ public class SearchTaskController {
     }
 
     private ModelAndView getMav(List<Task> list) {
-        ModelAndView mav = new ModelAndView("/search/searchPage");
+        ModelAndView mav = new ModelAndView("index");
         mav.addObject("tasks", list);
         mav.addObject("statusList", StubData.getStatuses());
         mav.addObject("executorList", StubData.getExecutors());
