@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pb.task.manager.mapper.TaskMapper">
+
+    <resultMap id="taskResultMap" type="com.pb.task.manager.model.Task">
+        <id property="id" column="ID"/>
+        <result property="name" column="NAME"/>
+        <result property="status" column="STATUS" javaType="com.pb.task.manager.model.Status" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result property="executor" column="EXECUTOR"/>
+        <result property="author" column="AUTHOR"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="taskResultMap">
+        SELECT * FROM TASKS;
+    </select>
+
+    <select id="search" resultMap="taskResultMap" parameterType="com.pb.task.manager.model.filter.TaskSearchFilter">
+        SELECT * FROM TASKS
+        <where>
+            <if test="status != null and status != '' and status != 'ALL'">STATUS = #{status}</if>
+            <if test="executor != null and executor != '' and executor != 'ALL'">AND EXECUTOR = #{executor}</if>
+            <if test="author != null and author != '' and author != 'ALL'">AND AUTHOR = #{author}</if>
+        </where>
+    </select>
+
+</mapper>
