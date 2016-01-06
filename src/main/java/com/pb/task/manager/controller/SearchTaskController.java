@@ -1,9 +1,10 @@
 package com.pb.task.manager.controller;
 
-import com.pb.task.manager.dao.TaskDao;
-import com.pb.task.manager.model.Task;
+import com.pb.task.manager.model.Status;
+import com.pb.task.manager.model.TaskData;
 import com.pb.task.manager.model.filter.TaskSearchFilter;
-import com.pb.task.manager.util.StubData;
+import com.pb.task.manager.service.ActivitiService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,16 +22,16 @@ import java.util.List;
 public class SearchTaskController {
 
     @Autowired
-    private TaskDao taskDao;
+    private ActivitiService service;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView showSearchPage() {
-        return getMav(taskDao.findAll());
+        return getMav(service.findAll());
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public ModelAndView search(TaskSearchFilter filter) {
-        return getMav(taskDao.search(filter));
+        return getMav(service.search(filter));
     }
 
     @ModelAttribute("taskSearchFilter")
@@ -38,12 +39,12 @@ public class SearchTaskController {
         return new TaskSearchFilter();
     }
 
-    private ModelAndView getMav(List<Task> list) {
+    private ModelAndView getMav(List<TaskData> list) {
         ModelAndView mav = new ModelAndView("index");
         mav.addObject("tasks", list);
-        mav.addObject("statusList", StubData.getStatuses());
-        mav.addObject("executorList", StubData.getExecutors());
-        mav.addObject("authorList", StubData.getAuthors());
+        mav.addObject("statusList", Status.values());
+        mav.addObject("executorList", new ArrayList<String>());
+        mav.addObject("authorList", new ArrayList<String>());
         return mav;
     }
 
