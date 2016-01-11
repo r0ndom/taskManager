@@ -31,4 +31,9 @@ public class ActivitiController {
     public void submit(@RequestBody FormData data, boolean justCreated) {
         service.submitForm(data, justCreated);
     }
+
+    @ModelAttribute("formData")
+    public FormData getFormData() {
+        return new FormData();
+    }
 }
