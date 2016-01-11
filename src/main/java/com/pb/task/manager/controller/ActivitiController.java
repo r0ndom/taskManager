@@ -30,6 +30,9 @@ public class ActivitiController {
     @RequestMapping(value = "/submitTaskForm", method = RequestMethod.POST)
     public String submit(FormData data) {
         String id = service.submitForm(data);
+        if (data.getMap().containsKey("status")&&data.getMap().containsValue("done")) {
+            return "redirect:/";
+        }
         return "redirect:/task/" + id;
     }
 

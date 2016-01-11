@@ -94,7 +94,7 @@ public class ActivitiService {
         taskData.setActivitiDynamicId(task.getId());
         taskData.setId(task.getExecutionId());
         taskData.setState(state);
-        taskData.setStatus(status);
+        taskData.setStatus(status != null ? status : Status.NEW);
         taskData.setAuthor("");
         taskData.setName(getString(params.get("name")));
         taskData.setExecutor("");
