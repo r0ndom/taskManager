@@ -28,8 +28,8 @@ public class ActivitiController {
 
     @RequestMapping(value = "/submitTaskForm", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void submit(@RequestBody FormData data, boolean justCreated) {
-        service.submitForm(data, justCreated);
+    public void submit(FormData data) {
+        service.submitForm(data, true);
     }
 
     @ModelAttribute("formData")

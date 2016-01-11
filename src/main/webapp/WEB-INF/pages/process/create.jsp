@@ -9,8 +9,8 @@
     <jsp:include page="../commons/header.jsp"/>
     <div class="container">
       <div style="margin-left: 5%; margin-right: 5%;">
-          <form:form method="POST" commandName="formData" action="/submitForm">
-            <form:input path="${formData.map['name']}"/>
+          <form:form method="POST" commandName="formData" action="/submitTaskForm">
+            <form:input path="map['name']"/>
 
           </form:form>
       </div>
