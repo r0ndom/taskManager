@@ -6,6 +6,7 @@ package com.pb.task.manager.model;
 public class TaskData {
 
     private String id;
+    private String activitiDynamicId;
     private String name;
     private State state;
     private String executor;
@@ -17,8 +18,9 @@ public class TaskData {
     public TaskData() {
     }
 
-    public TaskData(String id, String name, State state, String executor, String author, Long expectedTime, String description, Status status) {
+    public TaskData(String id, String activitiDynamicId, String name, State state, String executor, String author, Long expectedTime, String description, Status status) {
         this.id = id;
+        this.activitiDynamicId = activitiDynamicId;
         this.name = name;
         this.state = state;
         this.executor = executor;
@@ -90,6 +92,14 @@ public class TaskData {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public String getActivitiDynamicId() {
+        return activitiDynamicId;
+    }
+
+    public void setActivitiDynamicId(String activitiDynamicId) {
+        this.activitiDynamicId = activitiDynamicId;
     }
 }
 

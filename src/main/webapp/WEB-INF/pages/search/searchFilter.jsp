@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-md-3">
             <label>${statusMessage}:</label>
-            <form:select cssClass="form-control" path="status" items="${statusList}" />
+            <form:select cssClass="form-control" path="status" items="${statusList}" itemValue="name" itemLabel="name"  />
         </div>
         <div class="col-md-3">
             <label>${executorMessage}:</label>
