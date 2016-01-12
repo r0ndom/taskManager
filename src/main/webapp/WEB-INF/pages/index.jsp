@@ -2,6 +2,7 @@
 <%@taglib prefix="tag" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <spring:message code="messages.create" var="createMessage"/>
 
@@ -16,7 +17,9 @@
                     </div>
                 </div>
                 <jsp:include page="search/searchFilter.jsp"/>
-                <input class="btn btn-success" style="margin-top: 25px" value="${createMessage}" onclick="window.location.href = '/create/';">
+                <sec:authorize access="hasRole('ROLE_MANAGER')">
+                    <input class="btn btn-success" style="margin-top: 25px" value="${createMessage}" onclick="window.location.href = '/create/';">
+                </sec:authorize>
                 <jsp:include page="search/searchTable.jsp"/>
             </div>
         </div>
