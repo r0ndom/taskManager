@@ -24,12 +24,12 @@ public class SearchTaskController {
     @Autowired
     private ActivitiService service;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "/tasks/", method = RequestMethod.GET)
     public ModelAndView showSearchPage() {
         return getMav(service.findAll());
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(value = "/tasks/", method = RequestMethod.POST)
     public ModelAndView search(TaskSearchFilter filter) {
         return getMav(service.search(filter));
     }

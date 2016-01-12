@@ -7,11 +7,12 @@
                http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:component-scan
-            base-package="com.pb.task.manager.service"/>
+            base-package="com.pb.task.manager.dao, com.pb.task.manager.service"/>
     <context:property-placeholder
             location="classpath:/db.properties"/>
 
     <import resource="dataSource.xml"/>
     <import resource="activiti-context.xml"/>
+    <import resource="spring-security.xml"/>
 
 </beans>
