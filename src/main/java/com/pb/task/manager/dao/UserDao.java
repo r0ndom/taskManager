@@ -13,6 +13,7 @@ import java.util.List;
 @Repository
 public class UserDao {
 
+    public static final String DEFAULT_PASSWORD = "123123";
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
@@ -25,7 +26,7 @@ public class UserDao {
     public void createManager(User user) { create(user, Role.ROLE_MANAGER); }
 
     public void create(User user, Role role) {
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        String encodedPassword = passwordEncoder.encode(DEFAULT_PASSWORD);
         user.setPassword(encodedPassword);
         user.setRole(role);
         mapper.create(user);
@@ -53,5 +54,9 @@ public class UserDao {
 
     public List<User> findAll() {
         return mapper.findAll();
+    }
+
+    public List<User> findByRole(Role role) {
+        return mapper.findByRole(role);
     }
 }

@@ -2,20 +2,28 @@ package com.pb.task.manager.model;
 
 public enum Status {
 
-    NEW("new"),
-    DEVELOPING("development"),
-    TESTING("testing"),
-    DONE("done"),
-    REOPENED("reopened");
+    ALL("all", "Все"),
+    NEW("new", "Новая"),
+    DEVELOPING("development", "Разработка"),
+    TESTING("testing", "Тестирование"),
+    DONE("done", "Выполнено"),
+    REOPENED("reopened", "Доработка");
 
     private final String name;
 
-    Status(String s) {
-        this.name = s;
+    private final String viewName;
+
+    Status(String strName, String viewName) {
+        this.name = strName;
+        this.viewName = viewName;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getViewName() {
+        return viewName;
     }
 
     public static Status getStatus(String s) {

@@ -14,11 +14,12 @@
         <td>${authorMessage}</td>
     </tr>
     <c:forEach var="task" items="${tasks}">
-        <tr id="${task.id}">
+        <tr id="${task.id}" onclick="window.location.href = '/app/tasks/show/${task.id}/'">
             <td id="name">${task.name}</td>
-            <td id="status">${task.status}</td>
+            <td id="status">${task.status.viewName}</td>
             <td id="executor">${task.executor}</td>
             <td id="author">${task.author}</td>
+            <span id="${task.activitiDynamicId}" hidden></span>
         </tr>
     </c:forEach>
 </table>

@@ -3,8 +3,8 @@ package com.pb.task.manager.model;
 import org.springframework.security.core.GrantedAuthority;
 
 public enum Role implements GrantedAuthority {
-    ROLE_DEVELOPER("Developer"),
-    ROLE_MANAGER("Manager");
+    ROLE_DEVELOPER("Разработчик"),
+    ROLE_MANAGER("Менеджер");
 
     private final String roleViewName;
 

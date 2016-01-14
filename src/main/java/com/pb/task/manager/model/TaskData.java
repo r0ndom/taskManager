@@ -9,8 +9,8 @@ public class TaskData {
     private String activitiDynamicId;
     private String name;
     private State state;
-    private String executor;
-    private String author;
+    private User executor;
+    private User author;
     private Long expectedTime;
     private String description;
     private Status status;
@@ -18,7 +18,7 @@ public class TaskData {
     public TaskData() {
     }
 
-    public TaskData(String id, String activitiDynamicId, String name, State state, String executor, String author, Long expectedTime, String description, Status status) {
+    public TaskData(String id, String activitiDynamicId, String name, State state, User executor, User author, Long expectedTime, String description, Status status) {
         this.id = id;
         this.activitiDynamicId = activitiDynamicId;
         this.name = name;
@@ -46,19 +46,19 @@ public class TaskData {
         this.name = name;
     }
 
-    public String getExecutor() {
+    public User getExecutor() {
         return executor;
     }
 
-    public void setExecutor(String executor) {
+    public void setExecutor(User executor) {
         this.executor = executor;
     }
 
-    public String getAuthor() {
+    public User getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(User author) {
         this.author = author;
     }
 

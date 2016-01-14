@@ -26,6 +26,10 @@
         select * from USERS where LDAP = #{ldap}
     </select>
 
+    <select id="findByRole" resultMap="getUserResultMap">
+        select * from USERS where ROLE = #{role}
+    </select>
+
     <insert id="create" parameterType="com.pb.task.manager.model.User">
         INSERT INTO USERS(LDAP, FIRST_NAME, LAST_NAME, PASSWORD, ROLE) VALUES (#{ldap}, #{firstName}, #{lastName}, #{password}, #{role});
     </insert>

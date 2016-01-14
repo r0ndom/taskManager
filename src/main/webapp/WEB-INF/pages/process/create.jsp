@@ -14,7 +14,7 @@
     <jsp:include page="../commons/header.jsp"/>
     <div class="container">
       <div style="margin-left: 5%; margin-right: 5%;">
-          <form:form method="POST" commandName="formData" action="/submitTaskForm">
+          <form:form method="POST" commandName="formData" action="/app/tasks/submitTaskForm">
             <div class="row">
               <div class="col-md-2">
                 <p>${nameMessage}</p>
@@ -23,6 +23,7 @@
               <div class="col-md-10">
                 <form:input path="map['name']" cssClass="form-control"/>
                 <form:textarea path="map['description']" cssClass="form-control"/>
+                <form:hidden path="map['author']" value="${author}"/>
               </div>
             </div>
             <span>

@@ -1,5 +1,7 @@
 package com.pb.task.manager.controller;
 
+import com.pb.task.manager.util.MessageUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -8,6 +10,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class LoginController {
+
+    @Autowired
+    private MessageUtils messageUtils;
 
     private static final String LOGIN = "login/login";
 
@@ -18,13 +23,13 @@ public class LoginController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView login(@RequestParam(value = "error", required = false) String error) {
+        String errorMessage = messageUtils.getMessage("messages.errorLogin");
         ModelAndView model = new ModelAndView();
         if (error != null) {
-            model.addObject("error", "Неверный логин и пароль");
+            model.addObject("error", errorMessage);
         }
         model.setViewName(LOGIN);
         return model;
-
     }
 
 }

@@ -1,9 +1,7 @@
 package com.pb.task.manager.service;
 
-import com.pb.task.manager.model.FormData;
-import com.pb.task.manager.model.State;
-import com.pb.task.manager.model.Status;
-import com.pb.task.manager.model.TaskData;
+import com.pb.task.manager.dao.UserDao;
+import com.pb.task.manager.model.*;
 import com.pb.task.manager.model.filter.TaskSearchFilter;
 import org.activiti.engine.FormService;
 import org.activiti.engine.RuntimeService;
@@ -31,6 +29,8 @@ public class ActivitiService {
     private TaskService taskService;
     @Autowired
     private FormService formService;
+    @Autowired
+    private UserDao userDao;
 
     private String startProcess() {
         ProcessInstance instance = runtimeService.startProcessInstanceByKey("process");
@@ -71,9 +71,15 @@ public class ActivitiService {
         List<Task> query = taskService.createTaskQuery().list();
         for (Task task : query) {
             Map<String, Object> params = getParams(task.getExecutionId());
-            if (params.containsKey("status")&&params.containsValue(filter.getStatus())) {
-                result.add(task);
+            String status = params.get("status") != null ? getString(params.get("status")) : "new";
+            String author = getString(params.get("author"));
+            String executor = getString(params.get("executor"));
+            if (status.equals(filter.getStatus())||filter.getStatus().equals("all")) {
+                if (author.equals(filter.getAuthor())||filter.getAuthor().equals(""))
+                    if(executor.equals(filter.getExecutor())||filter.getExecutor().equals(""))
+                        result.add(task);
             }
+
         }
         return generateTaskDataList(result);
     }
@@ -95,11 +101,13 @@ public class ActivitiService {
         taskData.setId(task.getExecutionId());
         taskData.setState(state);
         taskData.setStatus(status != null ? status : Status.NEW);
-        taskData.setAuthor("");
+        String authorLdap = getString(params.get("author"));
+        taskData.setAuthor(userDao.findByLdap(authorLdap));
         taskData.setName(getString(params.get("name")));
-        taskData.setExecutor("");
+        String executorLdap = getString(params.get("executor"));
+        taskData.setExecutor(userDao.findByLdap(executorLdap));
         String expectedTimeStr = getString(params.get("expectedTime"));
-        Long expectedTime = (expectedTimeStr != null && !expectedTimeStr.equals("null"))
+        Long expectedTime = (expectedTimeStr != null && !expectedTimeStr.equals(""))
                 ? Long.parseLong(expectedTimeStr) : null;
         taskData.setExpectedTime(expectedTime);
         taskData.setDescription(getString(params.get("description")));
@@ -107,6 +115,18 @@ public class ActivitiService {
     }
 
     private String getString(Object object) {
-        return String.valueOf(object);
+        return object != null ? String.valueOf(object) : "";
+    }
+
+    public boolean checkUserAccess(String id) {
+        User currentUser = userDao.getCurrentUser();
+        Map<String, Object> params = getParams(id);
+        String ldap = getString(params.get("executor"));
+        if (ldap == null || ldap.equals("")) {
+            return !currentUser.getLdap().equals(getString(params.get("author")));
+        }
+
+        User executor = userDao.findByLdap(ldap);
+        return executor != null && currentUser.getLdap().equals(ldap);
     }
 }

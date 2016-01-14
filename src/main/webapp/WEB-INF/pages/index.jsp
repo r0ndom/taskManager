@@ -5,20 +5,19 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <spring:message code="messages.create" var="createMessage"/>
+<spring:message code="messages.users" var="usersMessage"/>
 
 <tag:layout>
     <div id="mainPage">
         <jsp:include page="commons/header.jsp"/>
         <div class="container">
             <div style="margin-left: 5%; margin-right: 5%;">
-                <div class="row">
-                    <div class="col-md-9">
-
-                    </div>
-                </div>
                 <jsp:include page="search/searchFilter.jsp"/>
                 <sec:authorize access="hasRole('ROLE_MANAGER')">
-                    <input class="btn btn-success" style="margin-top: 25px" value="${createMessage}" onclick="window.location.href = '/create/';">
+                    <input class="btn btn-success" style="margin-top: 25px" value="${createMessage}" onclick="window.location.href = '/app/tasks/create/';">
+                </sec:authorize>
+                <sec:authorize access="hasRole('ROLE_MANAGER')">
+                    <input class="btn btn-success" style="margin-top: 25px" value="${usersMessage}" onclick="window.location.href = '/app/users/';">
                 </sec:authorize>
                 <jsp:include page="search/searchTable.jsp"/>
             </div>

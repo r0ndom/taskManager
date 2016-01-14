@@ -3,6 +3,7 @@
 <spring:message code="messages.exit" var="messageExit"/>
 
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+
   <div class="navbar-inner">
     <div class="container-fluid">
       <form action="/j_spring_security_logout" method="post" id="logoutForm">
