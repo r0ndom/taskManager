@@ -12,6 +12,7 @@
 <spring:message code="messages.executor" var="executorMessage"/>
 <spring:message code="messages.expectedTime" var="timeMessage"/>
 <spring:message code="messages.edit" var="editMessage"/>
+<spring:message code="messages.back" var="backMessage"/>
 
 <tag:layout>
   <div id="mainPage">
@@ -81,6 +82,7 @@
             <c:if test="${isWritable}">
                 <input class="btn btn-success" style="margin-top: 25px" value="${editMessage}" onclick="window.location.href = '/app/tasks/${taskData.id}/';">
             </c:if>
+            <input class="btn btn-success" style="margin-top: 25px" value="${backMessage}" onclick="window.location.href = '/app/tasks/';">
         </div>
       </div>
     </div>
