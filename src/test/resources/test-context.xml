@@ -9,11 +9,12 @@
 
     <context:component-scan base-package="com.pb.task.manager"/>
     <context:annotation-config/>
-
     <context:property-placeholder location="classpath:/db.properties"/>
 
-<!--<bean id="activitiService" class="com.pb.task.manager.service.ActivitiService"/>-->
-    <bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
     <import resource="test-dataSource.xml"/>
     <import resource="test-activiti-context.xml"/>
+
+    <bean id="activitiService" class="com.pb.task.manager.service.ActivitiService"/>
+    <bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
 </beans>
