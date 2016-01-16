@@ -10,12 +10,11 @@ import java.util.Map;
  */
 public class TaskData {
 
-//    @Autowired
-//    private UserDao userDao;
+    @Autowired
+    private UserDao userDao;
 
     private String id;
     private String activitiDynamicId;
-
     Map<String, String> params;
 
     public TaskData(Map<String, String> params) {
@@ -34,14 +33,14 @@ public class TaskData {
         return params.get("name");
     }
 
-//    public User getExecutor() {
-//        return userDao.findByLdap(params.get("executor"));
-//    }
-//
-//    public User getAuthor() {
-//        String authorLdap = params.get("author");
-//        return userDao.findByLdap(authorLdap);
-//    }
+    public User getExecutor() {
+        return userDao.findByLdap(params.get("executor"));
+    }
+
+    public User getAuthor() {
+        String authorLdap = params.get("author");
+        return userDao.findByLdap(authorLdap);
+    }
 
     public State getState() {
         return State.getState(params.get("state"));
@@ -67,6 +66,10 @@ public class TaskData {
 
     public void setActivitiDynamicId(String activitiDynamicId) {
         this.activitiDynamicId = activitiDynamicId;
+    }
+
+    public Map<String, String> getParams() {
+        return params;
     }
 }
 

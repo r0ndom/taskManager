@@ -12,6 +12,8 @@
     <context:property-placeholder
             location="classpath:/db.properties"/>
 
+    <bean id="userDao" class="com.pb.task.manager.dao.UserDao"/>
+
     <import resource="dataSource.xml"/>
     <import resource="activiti-context.xml"/>
     <import resource="spring-security.xml"/>

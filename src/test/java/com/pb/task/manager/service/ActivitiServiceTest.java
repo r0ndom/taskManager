@@ -7,14 +7,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by stas on 16.01.16.
@@ -28,21 +23,30 @@ public class ActivitiServiceTest {
     private ActivitiService service;
 
     @Test
-    public void testSearch() {
-        createTask();
+    public void testMain() {
+        String taskId = createOneTask();
 
         List<TaskData> taskDataList = service.findAll();
+        System.out.println("taskId: " + taskId);
         System.out.println("taskDataList.size(): " + taskDataList.size());
     }
 
-    private void createTask() {
+    @Test
+    public void testShowTask() {
+        String taskId = createOneTask();
+        TaskData taskData = service.getTaskData(taskId);
+
+
+    }
+
+    private String createOneTask() {
         FormData formData = new FormData();
         formData.setMap(new HashMap<String, String>(){{
             put("name", "someName");
             put("description", "someDescription");
             put("author", "someAuthor");
         }});
-        service.submitForm(formData);
+        return service.submitForm(formData);
     }
 
 
