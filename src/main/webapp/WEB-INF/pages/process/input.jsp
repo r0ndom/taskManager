@@ -47,7 +47,7 @@
             </div>
           </div>
           <input class="btn btn-success" value="${nextMessage}" type="submit"/>
-          <input class="btn btn-default" value="${mainPageMessage}" onclick="window.location.href = '/';"/>
+          <input class="btn btn-default" value="${mainPageMessage}" onclick="window.location.href = '/app/tasks/';"/>
         </form:form>
       </div>
     </div>

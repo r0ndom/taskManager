@@ -1,33 +1,25 @@
 package com.pb.task.manager.model;
 
+import com.pb.task.manager.dao.UserDao;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Map;
+
 /**
  * Created by Mike on 12/31/2015.
  */
 public class TaskData {
 
+    @Autowired
+    private UserDao userDao;
+
     private String id;
     private String activitiDynamicId;
-    private String name;
-    private State state;
-    private User executor;
-    private User author;
-    private Long expectedTime;
-    private String description;
-    private Status status;
 
-    public TaskData() {
-    }
+    Map<String, String> params;
 
-    public TaskData(String id, String activitiDynamicId, String name, State state, User executor, User author, Long expectedTime, String description, Status status) {
-        this.id = id;
-        this.activitiDynamicId = activitiDynamicId;
-        this.name = name;
-        this.state = state;
-        this.executor = executor;
-        this.author = author;
-        this.expectedTime = expectedTime;
-        this.description = description;
-        this.status = status;
+    public TaskData(Map<String, String> params) {
+        this.params = params;
     }
 
     public String getId() {
@@ -39,59 +31,34 @@ public class TaskData {
     }
 
     public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        return params.get("name");
     }
 
     public User getExecutor() {
-        return executor;
-    }
-
-    public void setExecutor(User executor) {
-        this.executor = executor;
+        return userDao.findByLdap(params.get("executor"));
     }
 
     public User getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(User author) {
-        this.author = author;
+        String authorLdap = params.get("author");
+        return userDao.findByLdap(authorLdap);
     }
 
     public State getState() {
-        return state;
-    }
-
-    public void setState(State state) {
-        this.state = state;
+        return State.getState(params.get("state"));
     }
 
     public Long getExpectedTime() {
-        return expectedTime;
-    }
-
-    public void setExpectedTime(Long expectedTime) {
-        this.expectedTime = expectedTime;
+        String expectedTimeStr = params.get("expectedTime");
+        return (expectedTimeStr != null && !expectedTimeStr.equals(""))
+                ? Long.parseLong(expectedTimeStr) : null;
     }
 
     public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+        return params.get("description");
     }
 
     public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
+        return Status.getStatus(params.get("status"));
     }
 
     public String getActivitiDynamicId() {
