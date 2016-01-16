@@ -2,6 +2,7 @@ package com.pb.task.manager.service;
 
 import com.pb.task.manager.model.FormData;
 import com.pb.task.manager.model.TaskData;
+import org.apache.log4j.spi.LoggerFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class ActivitiServiceTest {
     public void testShowTask() {
         String taskId = createOneTask();
         TaskData taskData = service.getTaskData(taskId);
-
+        System.out.println(String.format("Id: %s, activitiDynamicId: %s, params: %s", taskData.getId(), taskData.getActivitiDynamicId(), taskData.getParams()));
 
     }
 

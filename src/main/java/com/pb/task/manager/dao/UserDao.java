@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-@Component
 public class UserDao {
 
     public static final String DEFAULT_PASSWORD = "123123";

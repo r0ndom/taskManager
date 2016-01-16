@@ -2,6 +2,8 @@ package com.pb.task.manager.model;
 
 import com.pb.task.manager.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import java.util.Map;
 
@@ -9,9 +11,6 @@ import java.util.Map;
  * Created by Mike on 12/31/2015.
  */
 public class TaskData {
-
-    @Autowired
-    private UserDao userDao;
 
     private String id;
     private String activitiDynamicId;
@@ -33,13 +32,12 @@ public class TaskData {
         return params.get("name");
     }
 
-    public User getExecutor() {
-        return userDao.findByLdap(params.get("executor"));
+    public String getExecutor() {
+        return params.get("executor");
     }
 
-    public User getAuthor() {
-        String authorLdap = params.get("author");
-        return userDao.findByLdap(authorLdap);
+    public String getAuthor() {
+        return params.get("author");
     }
 
     public State getState() {
