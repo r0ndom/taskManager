@@ -4,6 +4,7 @@ import com.pb.task.manager.mapper.UserMapper;
 import com.pb.task.manager.model.Role;
 import com.pb.task.manager.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
