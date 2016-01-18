@@ -30,7 +30,7 @@
                 <label>${nameMessage}</label>
               </div>
               <div class="col-md-6">
-                    <span>${taskData.name}</span>
+                    <span>${taskData.params['name']}</span>
               </div>
             </div>
             <p></p>

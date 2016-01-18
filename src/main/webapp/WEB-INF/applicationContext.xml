@@ -12,8 +12,6 @@
     <context:property-placeholder
             location="classpath:/db.properties"/>
 
-    <bean id="activitiService" class="com.pb.task.manager.service.ActivitiService" init-method="init"/>
-
     <import resource="dataSource.xml"/>
     <import resource="activiti-context.xml"/>
     <import resource="spring-security.xml"/>

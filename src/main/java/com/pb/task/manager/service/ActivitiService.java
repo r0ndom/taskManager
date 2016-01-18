@@ -6,6 +6,7 @@ import com.pb.task.manager.model.filter.TaskSearchFilter;
 import com.sun.org.apache.xpath.internal.SourceTree;
 import org.activiti.engine.*;
 import org.activiti.engine.form.FormProperty;
+import org.activiti.engine.form.TaskFormData;
 import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.context.Context;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
@@ -27,6 +28,7 @@ import java.util.Map;
 /**
  * Created by Mednikov on 05.01.2016.
  */
+@Service
 public class ActivitiService {
 
     @Autowired
@@ -41,14 +43,6 @@ public class ActivitiService {
     private RepositoryService repositoryService;
     @Autowired
     private UserDao userDao;
-    private ProcessInstance instance;
-
-    public void init() {
-        if (instance == null) {
-            instance = runtimeService.startProcessInstanceByKey("process");
-        }
-    }
-
 
     public String submitForm(FormData formData) {
         String id = (formData.getId() == null) ? startProcess() : formData.getId();
@@ -57,9 +51,10 @@ public class ActivitiService {
         return task.getExecutionId();
     }
 
-    public TaskData getTaskData(String id) {
+    public List<FormProperty> getTaskData(String id) {
         Task task = taskService.createTaskQuery().executionId(id).singleResult();
-        return generateTaskData(task);
+        return formService.getTaskFormData(task.getId()).getFormProperties();
+        //return generateTaskData(task);
     }
 
     public List<TaskData> findAll() {
@@ -106,6 +101,7 @@ public class ActivitiService {
     }
 
     private String startProcess() {
+        ProcessInstance instance = runtimeService.startProcessInstanceByKey("process");
         String processId = instance.getProcessInstanceId();
         TaskQuery query = taskService.createTaskQuery().processInstanceId(processId);
         Task task = query.singleResult();

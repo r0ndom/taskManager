@@ -35,8 +35,8 @@ public class ActivitiServiceTest {
     @Test
     public void testShowTask() {
         String taskId = createOneTask();
-        TaskData taskData = service.getTaskData(taskId);
-        System.out.println(String.format("Id: %s, activitiDynamicId: %s, params: %s", taskData.getId(), taskData.getActivitiDynamicId(), taskData.getParams()));
+        //TaskData taskData = service.getTaskData(taskId);
+        //System.out.println(String.format("Id: %s, activitiDynamicId: %s, params: %s", taskData.getId(), taskData.getActivitiDynamicId(), taskData.getParams()));
 
     }
 
