@@ -3,9 +3,16 @@ package com.pb.task.manager.service;
 import com.pb.task.manager.dao.UserDao;
 import com.pb.task.manager.model.*;
 import com.pb.task.manager.model.filter.TaskSearchFilter;
-import org.activiti.engine.FormService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
+import com.sun.org.apache.xpath.internal.SourceTree;
+import org.activiti.engine.*;
+import org.activiti.engine.form.FormProperty;
+import org.activiti.engine.impl.RepositoryServiceImpl;
+import org.activiti.engine.impl.context.Context;
+import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.activiti.engine.impl.pvm.PvmActivity;
+import org.activiti.engine.impl.pvm.ReadOnlyProcessDefinition;
+import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
@@ -20,7 +27,6 @@ import java.util.Map;
 /**
  * Created by Mednikov on 05.01.2016.
  */
-@Service
 public class ActivitiService {
 
     @Autowired
@@ -30,7 +36,19 @@ public class ActivitiService {
     @Autowired
     private FormService formService;
     @Autowired
+    private ManagementService managementService;
+    @Autowired
+    private RepositoryService repositoryService;
+    @Autowired
     private UserDao userDao;
+    private ProcessInstance instance;
+
+    public void init() {
+        if (instance == null) {
+            instance = runtimeService.startProcessInstanceByKey("process");
+        }
+    }
+
 
     public String submitForm(FormData formData) {
         String id = (formData.getId() == null) ? startProcess() : formData.getId();
@@ -88,7 +106,6 @@ public class ActivitiService {
     }
 
     private String startProcess() {
-        ProcessInstance instance = runtimeService.startProcessInstanceByKey("process");
         String processId = instance.getProcessInstanceId();
         TaskQuery query = taskService.createTaskQuery().processInstanceId(processId);
         Task task = query.singleResult();
@@ -124,4 +141,7 @@ public class ActivitiService {
     }
 
 
+    public List<String> getStatuses() {
+        return new ArrayList<>();
+    }
 }

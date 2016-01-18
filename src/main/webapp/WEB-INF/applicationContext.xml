@@ -12,7 +12,7 @@
     <context:property-placeholder
             location="classpath:/db.properties"/>
 
-    <bean id="userDao" class="com.pb.task.manager.dao.UserDao"/>
+    <bean id="activitiService" class="com.pb.task.manager.service.ActivitiService" init-method="init"/>
 
     <import resource="dataSource.xml"/>
     <import resource="activiti-context.xml"/>

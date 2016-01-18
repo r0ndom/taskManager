@@ -87,7 +87,7 @@ public class TaskController {
     private ModelAndView getMav(List<TaskData> list) {
         ModelAndView mav = new ModelAndView("index");
         mav.addObject("tasks", list);
-        mav.addObject("statusList", Status.values());
+        mav.addObject("statusList", service.getStatuses());
         mav.addObject("executorList", userDao.findByRole(Role.ROLE_DEVELOPER));
         mav.addObject("authorList", userDao.findByRole(Role.ROLE_MANAGER));
         return mav;

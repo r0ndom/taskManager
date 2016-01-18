@@ -14,7 +14,7 @@
     <import resource="test-dataSource.xml"/>
     <import resource="test-activiti-context.xml"/>
 
-    <bean id="activitiService" class="com.pb.task.manager.service.ActivitiService"/>
+    <bean id="activitiService" class="com.pb.task.manager.service.ActivitiService" init-method="init"/>
     <bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
 </beans>
