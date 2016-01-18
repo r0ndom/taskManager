@@ -20,7 +20,7 @@
         <div class="container">
                 <div class="form-group">
                     <label>${nameMessage}</label>
-                    <a class="form-control-static" >${taskData.name}</a>
+                    <p class="form-control-static" >${taskData.name}</p>
                 </div>
                 <div class="form-group">
                     <label>${descriptionMessage}</label>
@@ -36,7 +36,7 @@
                 </div>
                 <div class="form-group">
                     <label>${executorMessage}</label>
-                    <p class="form-control-static">${taskData.executor}</p>
+                    <p class="form-control-static">${taskData.executor}</p>cd
                 </div>
                 <div class="form-group">
                     <label>${timeMessage}</label>

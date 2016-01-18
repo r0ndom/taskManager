@@ -46,6 +46,7 @@ public class ActivitiServiceTest {
             put("name", "someName");
             put("description", "someDescription");
             put("author", "someAuthor");
+            put("status", "someStatus");
         }});
         return service.submitForm(formData);
     }

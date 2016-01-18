@@ -55,7 +55,8 @@ public class TaskData {
     }
 
     public Status getStatus() {
-        return Status.getStatus(params.get("status"));
+        Status status = Status.getStatus(params.get("status"));
+        return status == null? Status.NEW : status;
     }
 
     public String getActivitiDynamicId() {
