@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
 <spring:message code="messages.name" var="nameMessage"/>
 <spring:message code="messages.description" var="descriptionMessage"/>
@@ -15,78 +15,42 @@
 <spring:message code="messages.back" var="backMessage"/>
 
 <tag:layout>
-  <div id="mainPage">
-    <jsp:include page="../commons/header.jsp"/>
-    <style>
-      label {
-        padding-top: 10px;
-      }
-    </style>
-    <div id="wrapper">
-      <div class="container">
-        <div class="row col-md-6 col-md-offset-4" style="margin-top: 10%">
-            <div class="row">
-              <div class="col-md-2">
-                <label>${nameMessage}</label>
-              </div>
-              <div class="col-md-6">
-                    <span>${taskData.name}</span>
-              </div>
-            </div>
-            <p></p>
-            <div class="row">
-              <div class="col-md-2">
-                <label>${descriptionMessage}</label>
-              </div>
-              <div class="col-md-6">
-                <span>${taskData.description}</span>
-              </div>
-            </div>
-            <p></p>
-            <div class="row">
-              <div class="col-md-2">
-                <label>${statusMessage}</label>
-              </div>
-              <div class="col-md-6">
-                <span>${taskData.status}</span>
-              </div>
-            </div>
-            <p></p>
-            <div class="row">
-                <div class="col-md-2">
+    <div id="mainPage">
+        <jsp:include page="../commons/header.jsp"/>
+        <div class="container">
+                <div class="form-group">
+                    <label>${nameMessage}</label>
+                    <a class="form-control-static" >${taskData.name}</a>
+                </div>
+                <div class="form-group">
+                    <label>${descriptionMessage}</label>
+                    <p class="form-control-static">${taskData.description}</p>
+                </div>
+                <div class="form-group">
+                    <label>${statusMessage}</label>
+                    <p class="form-control-static">${taskData.status}</p>
+                </div>
+                <div class="form-group">
                     <label>${authorMessage}</label>
+                    <p class="form-control-static">${taskData.author}</p>
                 </div>
-                <div class="col-md-6">
-                        <span>${taskData.author}</span>
-                </div>
-            </div>
-            <p></p>
-            <div class="row">
-                <div class="col-md-2">
+                <div class="form-group">
                     <label>${executorMessage}</label>
+                    <p class="form-control-static">${taskData.executor}</p>
                 </div>
-                <div class="col-md-6">
-                    <span>${taskData.executor}</span>
-                </div>
-            </div>
-            <p></p>
-            <div class="row">
-                <div class="col-md-2">
+                <div class="form-group">
                     <label>${timeMessage}</label>
+                    <p class="form-control-static">${taskData.expectedTime}</p>
                 </div>
-                <div class="col-md-6">
-                    <span>${taskData.expectedTime}</span>
-                </div>
-            </div>
-            <p></p>
-            <c:if test="${isWritable}">
-                <input class="btn btn-success" style="margin-top: 25px" value="${editMessage}" onclick="window.location.href = '/app/tasks/${taskData.id}/';">
-            </c:if>
-            <input class="btn btn-success" style="margin-top: 25px" value="${backMessage}" onclick="window.location.href = '/app/tasks/';">
+                <c:if test="${isWritable}">
+                    <button class="btn btn-success"
+                            onclick="window.location.href ='/app/tasks/${taskData.id}/'">${editMessage}</button>
+                </c:if>
+                <button class="btn btn-default" onclick="window.location.href ='/app/tasks/'">${backMessage}</button>
         </div>
-      </div>
+        <jsp:include page="../commons/footer.jsp"/>
     </div>
-    <jsp:include page="../commons/footer.jsp"/>
-  </div>
 </tag:layout>
+
+
 
