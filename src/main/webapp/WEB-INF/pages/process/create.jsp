@@ -15,16 +15,23 @@
         <div class="container">
             <div style="margin-left: 5%; margin-right: 5%;">
                 <form:form method="POST" commandName="formData" action="/app/tasks/submitTaskForm">
-                    <div class="form-group">
-                        <label>${nameMessage}</label>
-                        <form:input path="map['name']" cssClass="form-control"/>
-                    </div>
-                    <div class="form-group">
-                        <label>${descriptionMessage}</label>
-                        <form:textarea path="map['description']" cssClass="form-control"/>
-                    </div>
-                    <div style="display: none;">
-                        <form:hidden path="map['author']" value="${author}"/>
+                    <c:forEach items="${taskData}" var="item">
+                        <c:if test="${!item.writable}">
+                            <div class="form-group">
+                                <label>${item.name}</label>
+                                <form:input path="map['${item.id}']" class="form-control-static" value="${item.value}"
+                                            disabled="true"/>
+                            </div>
+                        </c:if>
+                        <c:if test="${item.writable}">
+                            <div class="form-group">
+                                <label>${item.name}</label>
+                                <form:input path="map['${item.id}']" class="form-control-static" value="${item.value}"/>
+                            </div>
+                        </c:if>
+                    </c:forEach>
+                    <div hidden class="form-group">
+                        <form:input path="id" class="form-control-static" value="${taskId}"/>
                     </div>
                     <button type="submit" class="btn btn-success">${createMessage}</button>
                     <button type="reset" class="btn btn-default">${resetMessage}</button>

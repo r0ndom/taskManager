@@ -3,11 +3,11 @@ package com.pb.task.manager.controller;
 import com.pb.task.manager.dao.UserDao;
 import com.pb.task.manager.model.FormData;
 import com.pb.task.manager.model.Role;
-import com.pb.task.manager.model.Status;
 import com.pb.task.manager.model.TaskData;
 import com.pb.task.manager.model.filter.TaskSearchFilter;
 import com.pb.task.manager.service.ActivitiService;
 
+import org.activiti.engine.form.FormProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Mike on 12/31/2015.
@@ -44,24 +44,39 @@ public class TaskController {
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public ModelAndView showCreatePage() {
         ModelAndView mav = new ModelAndView("process/create");
-        mav.addObject("author", userDao.getCurrentUser().getLdap());
+        String taskId = service.startProcess();
+        List<FormProperty> formPropertyList =  service.getFormProperty(taskId);
+        for(FormProperty formProperty: formPropertyList){
+                System.out.println("formPropertyName: " + formProperty.getName() + ", readable: " + formProperty.isReadable() + ", writable: " + formProperty.isWritable());
+        }
+        System.out.println("Create task with id: " + taskId);
+        mav.addObject("taskData", formPropertyList);
+        mav.addObject("taskId", taskId);
         return mav;
     }
 
     @RequestMapping(value = "/submitTaskForm", method = RequestMethod.POST)
     public String submit(FormData data) {
-        String id = service.submitForm(data);
+        System.out.println("Form data id: " + data.getId());
+        for(Map.Entry<String, String> entry: data.getMap().entrySet()){
+            System.out.println("key: " + entry.getKey() + ", value: " + entry.getValue());
+        }
+            if(data.getMap().get("author") == null){
+                data.getMap().put("author", userDao.getCurrentUser().getLdap());
+            }
+        String executionId = service.submitForm(data);
+        String taskId = service.getTaskIdByExecutionId(executionId);
         if (data.getMap().containsKey("status")) {
             if (data.getMap().get("status").equals("done"))
                 return "redirect:/";
         }
-        return "redirect:/app/tasks/show/" + id;
+        return "redirect:/app/tasks/show/" + taskId;
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ModelAndView getTaskData(@PathVariable("id") String id) {
         ModelAndView mav = new ModelAndView("process/input");
-        mav.addObject("taskData", service.getTaskData(id));
+        mav.addObject("taskData", service.getFormProperty(id));
         mav.addObject("executor", userDao.getCurrentUser().getLdap());
         return mav;
     }
@@ -69,7 +84,7 @@ public class TaskController {
     @RequestMapping(value = "/show/{id}", method = RequestMethod.GET)
     public ModelAndView showTaskData(@PathVariable("id") String id) {
         ModelAndView mav = new ModelAndView("process/details");
-        mav.addObject("taskData", service.getTaskData(id));
+        mav.addObject("taskData", service.getFormProperty(id));
         mav.addObject("isWritable", service.checkUserAccess(id));
         return mav;
     }

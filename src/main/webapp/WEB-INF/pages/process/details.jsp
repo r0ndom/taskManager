@@ -18,35 +18,24 @@
     <div id="mainPage">
         <jsp:include page="../commons/header.jsp"/>
         <div class="container">
-                <div class="form-group">
-                    <label>${nameMessage}</label>
-                    <p class="form-control-static" >${taskData.name}</p>
-                </div>
-                <div class="form-group">
-                    <label>${descriptionMessage}</label>
-                    <p class="form-control-static">${taskData.description}</p>
-                </div>
-                <div class="form-group">
-                    <label>${statusMessage}</label>
-                    <p class="form-control-static">${taskData.status}</p>
-                </div>
-                <div class="form-group">
-                    <label>${authorMessage}</label>
-                    <p class="form-control-static">${taskData.author}</p>
-                </div>
-                <div class="form-group">
-                    <label>${executorMessage}</label>
-                    <p class="form-control-static">${taskData.executor}</p>cd
-                </div>
-                <div class="form-group">
-                    <label>${timeMessage}</label>
-                    <p class="form-control-static">${taskData.expectedTime}</p>
-                </div>
-                <c:if test="${isWritable}">
-                    <button class="btn btn-success"
-                            onclick="window.location.href ='/app/tasks/${taskData.id}/'">${editMessage}</button>
+            <c:forEach items="${taskData}" var="item">
+                <c:if test="${item.readable && !item.writable}">
+                    <div class="form-group">
+                        <label>${item.name}</label>
+                        <p class="form-control-static">${item.value}</p>
+                    </div>
                 </c:if>
-                <button class="btn btn-default" onclick="window.location.href ='/app/tasks/'">${backMessage}</button>
+                <c:if test="${item.readable && item.writable}">
+                    <div class="form-group">
+                        <label>${item.name}</label>
+                        <input class="form-control-static" value="${item.value}"/>
+                    </div>
+                </c:if>
+            </c:forEach>
+            <c:if test="${isWritable}">
+                <button class="btn btn-success" onclick="window.location.href ='/app/tasks/${taskData[0].id}/'">${editMessage}</button>
+            </c:if>
+            <button class="btn btn-default" onclick="window.location.href ='/app/tasks/'">${backMessage}</button>
         </div>
         <jsp:include page="../commons/footer.jsp"/>
     </div>

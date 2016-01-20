@@ -35,7 +35,7 @@ public class ActivitiServiceTest {
     @Test
     public void testShowTask() {
         String taskId = createOneTask();
-        //TaskData taskData = service.getTaskData(taskId);
+        //TaskData taskData = service.getFormProperty(taskId);
         //System.out.println(String.format("Id: %s, activitiDynamicId: %s, params: %s", taskData.getId(), taskData.getActivitiDynamicId(), taskData.getParams()));
 
     }
@@ -55,7 +55,7 @@ public class ActivitiServiceTest {
 //    @RequestMapping(value = "/show/{id}", method = RequestMethod.GET)
 //    public ModelAndView showTaskData(@PathVariable("id") String id) {
 //        ModelAndView mav = new ModelAndView("process/details");
-//        mav.addObject("taskData", service.getTaskData(id));
+//        mav.addObject("taskData", service.getFormProperty(id));
 //        mav.addObject("isWritable", service.checkUserAccess(id));
 //        return mav;
 //    }

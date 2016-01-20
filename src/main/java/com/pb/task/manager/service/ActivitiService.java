@@ -6,6 +6,7 @@ import com.pb.task.manager.model.filter.TaskSearchFilter;
 import com.sun.org.apache.xpath.internal.SourceTree;
 import org.activiti.engine.*;
 import org.activiti.engine.form.FormProperty;
+import org.activiti.engine.form.StartFormData;
 import org.activiti.engine.form.TaskFormData;
 import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.context.Context;
@@ -45,16 +46,21 @@ public class ActivitiService {
     private UserDao userDao;
 
     public String submitForm(FormData formData) {
-        String id = (formData.getId() == null) ? startProcess() : formData.getId();
+        String id = formData.getId();
         Task task = taskService.createTaskQuery().taskId(id).singleResult();
         formService.submitTaskFormData(id, formData.getMap());
         return task.getExecutionId();
     }
 
-    public List<FormProperty> getTaskData(String id) {
-        Task task = taskService.createTaskQuery().executionId(id).singleResult();
-        return formService.getTaskFormData(task.getId()).getFormProperties();
-        //return generateTaskData(task);
+    public String getTaskIdByExecutionId(String executionId) {
+        Task task = taskService.createTaskQuery().executionId(executionId).singleResult();
+        return task.getId();
+    }
+
+
+    public List<FormProperty> getFormProperty(String id) {
+        System.out.println("getFormProperty by id: " + id);
+        return formService.getTaskFormData(id).getFormProperties();
     }
 
     public List<TaskData> findAll() {
@@ -82,7 +88,8 @@ public class ActivitiService {
 
     public boolean checkUserAccess(String id) {
         User currentUser = userDao.getCurrentUser();
-        Map<String, Object> params = getParams(id);
+        Task task = taskService.createTaskQuery().taskId(id).singleResult();
+        Map<String, Object> params = getParams(task.getExecutionId());
         String ldap = getString(params.get("executor"));
         if (ldap == null || ldap.equals("")) {
             return !currentUser.getLdap().equals(getString(params.get("author")));
@@ -100,7 +107,7 @@ public class ActivitiService {
         return params;
     }
 
-    private String startProcess() {
+    public String startProcess() {
         ProcessInstance instance = runtimeService.startProcessInstanceByKey("process");
         String processId = instance.getProcessInstanceId();
         TaskQuery query = taskService.createTaskQuery().processInstanceId(processId);

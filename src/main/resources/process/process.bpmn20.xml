@@ -4,9 +4,9 @@
     <startEvent id="sid-550A27CC-345D-4A6C-8A96-E7011CE92D76"></startEvent>
     <userTask id="sid-938A71D1-F817-45F2-9785-519D0CC8D09A" name="create task" activiti:assignee="kermit" activiti:formKey="createTask">
       <extensionElements>
-        <activiti:formProperty id="name" name="task name" type="string" variable="name" required="true"></activiti:formProperty>
-        <activiti:formProperty id="description" name="description" type="string" variable="description" required="true"></activiti:formProperty>
-        <activiti:formProperty id="author" name="author" type="string" variable="author" required="true"></activiti:formProperty>
+        <activiti:formProperty id="name" name="task name" type="string" variable="name" required="true" writable="true"></activiti:formProperty>
+        <activiti:formProperty id="description" name="description" type="string" variable="description" required="true" writable="true"></activiti:formProperty>
+        <activiti:formProperty id="author" name="author" type="string" variable="author" required="true" readable="false"></activiti:formProperty>
         <!--<activiti:formProperty id="status" name="status" type="string" variable="status" required="true"></activiti:formProperty>-->
       </extensionElements>
     </userTask>

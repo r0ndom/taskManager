@@ -18,33 +18,22 @@
     <div class="container">
       <div style="margin-left: 5%; margin-right: 5%;">
         <form:form method="POST" commandName="formData" action="/app/tasks/submitTaskForm">
-          <div class="row">
-            <div class="col-md-2">
-              <p>${nameMessage}</p>
-              <p>${descriptionMessage}</p>
-            </div>
-            <div class="col-md-10">
-              <form:hidden path="id" value="${taskData.activitiDynamicId}"/>
-              <form:input path="map['name']" cssClass="form-control" value="${taskData.name}" readonly="true"/>
-              <textarea name="map['description']" class="form-control" readonly>${taskData.description}</textarea>
-              <c:if test="${taskData.state.name == 'expectedTime'}">
-                <form:input path="map['expectedTime']" cssClass="form-control"/>
-                <form:hidden path="map['executor']" value="${executor}"/>
-              </c:if>
-              <c:choose>
-                <c:when test="${taskData.state.name == 'inProgress'}">
-                  <form:input path="map['status']" cssClass="form-control" readonly="true" value="development"/>
-                </c:when>
-                <c:when test="${taskData.state.name == 'onTesting'}">
-                  <form:input path="map['status']" cssClass="form-control" readonly="true" value="testing"/>
-                </c:when>
-                <c:when test="${taskData.state.name == 'setTaskStatus'}">
-                  <form:input path="map['status']" cssClass="form-control" readonly="true" value="done"/>
-                </c:when>
-                <c:otherwise>
-                </c:otherwise>
-              </c:choose>
-            </div>
+          <c:forEach items="${taskData}" var="item">
+            <c:if test="${item.readable && item.writable}">
+              <div class="form-group">
+                <label>${item.name}</label>
+                <p class="form-control-static">${item.value}</p>
+              </div>
+            </c:if>
+            <c:if test="${item.readable && !item.writable}">
+              <div class="form-group">
+                <label>${item.name}</label>
+                <input class="form-control-static" value="${item.value}"/>
+              </div>
+            </c:if>
+          </c:forEach>
+          <div style="display: none;">
+            <form:hidden path="map['author']" value="${author}"/>
           </div>
           <input class="btn btn-success" value="${nextMessage}" type="submit"/>
           <input class="btn btn-default" value="${mainPageMessage}" onclick="window.location.href = '/app/tasks/';"/>
