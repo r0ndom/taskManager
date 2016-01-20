@@ -126,8 +126,8 @@ public class ActivitiService {
     private TaskData generateTaskData(Task task) {
         Map<String, Object> params = getParams(task.getExecutionId());
         TaskData taskData = new TaskData(convertMap(params));
-        taskData.setActivitiDynamicId(task.getId());
-        taskData.setId(task.getExecutionId());
+        taskData.setActivitiDynamicId(task.getExecutionId());
+        taskData.setId(task.getId());
         return taskData;
     }
 

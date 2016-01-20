@@ -12,8 +12,8 @@
     </userTask>
     <userTask id="sid-A6978588-BF9A-4A52-9D08-ABB7E5594AA9" name="define expected time" activiti:assignee="kermit" activiti:formKey="expectedTime">
       <extensionElements>
-        <activiti:formProperty id="name" name="Name" type="string" variable="name" ></activiti:formProperty>
-        <activiti:formProperty id="description" name="Description" type="string" variable="description" ></activiti:formProperty>
+        <activiti:formProperty id="name" name="Name" type="string" variable="name" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="description" name="Description" type="string" variable="description" writable="false"></activiti:formProperty>
         <activiti:formProperty id="expectedTime" name="Expected Time" type="long" variable="expectedTime" required="true"></activiti:formProperty>
         <activiti:formProperty id="executor" name="Executor" type="string" variable="executor" required="true"></activiti:formProperty>
       </extensionElements>

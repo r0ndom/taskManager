@@ -74,18 +74,23 @@ public class TaskController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ModelAndView getTaskData(@PathVariable("id") String id) {
-        ModelAndView mav = new ModelAndView("process/input");
-        mav.addObject("taskData", service.getFormProperty(id));
+    public ModelAndView getTaskData(@PathVariable("id") String taskId) {
+        ModelAndView mav = new ModelAndView("process/details");
+        mav.addObject("taskData", service.getFormProperty(taskId));
         mav.addObject("executor", userDao.getCurrentUser().getLdap());
+        mav.addObject("isWritable", true);
+        mav.addObject("taskId", taskId);
+        mav.addObject("isSubmit", true);
         return mav;
     }
 
     @RequestMapping(value = "/show/{id}", method = RequestMethod.GET)
-    public ModelAndView showTaskData(@PathVariable("id") String id) {
+    public ModelAndView showTaskData(@PathVariable("id") String taskId) {
         ModelAndView mav = new ModelAndView("process/details");
-        mav.addObject("taskData", service.getFormProperty(id));
-        mav.addObject("isWritable", service.checkUserAccess(id));
+        mav.addObject("taskData", service.getFormProperty(taskId));
+        mav.addObject("isWritable", false);
+        mav.addObject("taskId", taskId);
+        mav.addObject("isEditor", service.checkUserAccess(taskId));
         return mav;
     }
 
