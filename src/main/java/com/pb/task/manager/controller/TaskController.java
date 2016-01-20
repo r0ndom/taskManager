@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Mike on 12/31/2015.
@@ -45,9 +46,9 @@ public class TaskController {
     public ModelAndView showCreatePage() {
         ModelAndView mav = new ModelAndView("process/create");
         String taskId = service.startProcess();
-        List<FormProperty> formPropertyList =  service.getFormProperty(taskId);
-        for(FormProperty formProperty: formPropertyList){
-                System.out.println("formPropertyName: " + formProperty.getName() + ", readable: " + formProperty.isReadable() + ", writable: " + formProperty.isWritable());
+        List<FormProperty> formPropertyList = service.getFormProperty(taskId);
+        for (FormProperty formProperty : formPropertyList) {
+            System.out.println("formPropertyName: " + formProperty.getName() + ", readable: " + formProperty.isReadable() + ", writable: " + formProperty.isWritable());
         }
         System.out.println("Create task with id: " + taskId);
         mav.addObject("taskData", formPropertyList);
@@ -58,12 +59,14 @@ public class TaskController {
     @RequestMapping(value = "/submitTaskForm", method = RequestMethod.POST)
     public String submit(FormData data) {
         System.out.println("Form data id: " + data.getId());
-        for(Map.Entry<String, String> entry: data.getMap().entrySet()){
-            System.out.println("key: " + entry.getKey() + ", value: " + entry.getValue());
+        Map<String, Object> taskParams = service.getVariables(data.getId());
+
+        if (!taskParams.containsKey("author") && data.getMap().get("author") == null) {
+            data.getMap().put("author", userDao.getCurrentUser().getLdap());
+        } else if(!taskParams.containsKey("executor") && data.getMap().get("executor") == null){
+            data.getMap().put("executor", userDao.getCurrentUser().getLdap());
         }
-            if(data.getMap().get("author") == null){
-                data.getMap().put("author", userDao.getCurrentUser().getLdap());
-            }
+
         String executionId = service.submitForm(data);
         String taskId = service.getTaskIdByExecutionId(executionId);
         if (data.getMap().containsKey("status")) {

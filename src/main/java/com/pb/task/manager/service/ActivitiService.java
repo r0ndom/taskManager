@@ -3,18 +3,8 @@ package com.pb.task.manager.service;
 import com.pb.task.manager.dao.UserDao;
 import com.pb.task.manager.model.*;
 import com.pb.task.manager.model.filter.TaskSearchFilter;
-import com.sun.org.apache.xpath.internal.SourceTree;
 import org.activiti.engine.*;
 import org.activiti.engine.form.FormProperty;
-import org.activiti.engine.form.StartFormData;
-import org.activiti.engine.form.TaskFormData;
-import org.activiti.engine.impl.RepositoryServiceImpl;
-import org.activiti.engine.impl.context.Context;
-import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.activiti.engine.impl.pvm.PvmActivity;
-import org.activiti.engine.impl.pvm.ReadOnlyProcessDefinition;
-import org.activiti.engine.impl.pvm.process.ActivityImpl;
-import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
@@ -45,6 +35,10 @@ public class ActivitiService {
     @Autowired
     private UserDao userDao;
 
+    public Map<String, Object> getVariables(String taskId){
+         return taskService.getVariables(taskId);
+    }
+
     public String submitForm(FormData formData) {
         String id = formData.getId();
         Task task = taskService.createTaskQuery().taskId(id).singleResult();
@@ -72,7 +66,7 @@ public class ActivitiService {
         List<Task> result = new ArrayList<Task>();
         List<Task> query = taskService.createTaskQuery().list();
         for (Task task : query) {
-            Map<String, Object> params = getParams(task.getExecutionId());
+            Map<String, Object> params = getParamsByExecutionId(task.getExecutionId());
             String status = params.get("status") != null ? getString(params.get("status")) : "new";
             String author = getString(params.get("author"));
             String executor = getString(params.get("executor"));
@@ -89,7 +83,7 @@ public class ActivitiService {
     public boolean checkUserAccess(String id) {
         User currentUser = userDao.getCurrentUser();
         Task task = taskService.createTaskQuery().taskId(id).singleResult();
-        Map<String, Object> params = getParams(task.getExecutionId());
+        Map<String, Object> params = getParamsByExecutionId(task.getExecutionId());
         String ldap = getString(params.get("executor"));
         if (ldap == null || ldap.equals("")) {
             return !currentUser.getLdap().equals(getString(params.get("author")));
@@ -99,9 +93,17 @@ public class ActivitiService {
         return executor != null && currentUser.getLdap().equals(ldap);
     }
 
-    private Map<String, Object> getParams(String id) {
+    private Map<String, Object> getParamsByExecutionId(String id) {
         Map<String, Object> params = new HashMap<String, Object>();
         Task task = taskService.createTaskQuery().executionId(id).singleResult();
+        params.put("state", task.getFormKey());
+        params.putAll(taskService.getVariables(task.getId()));
+        return params;
+    }
+
+    public Map<String, Object> getParamsByTaskId(String taskId){
+        Map<String, Object> params = new HashMap<String, Object>();
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         params.put("state", task.getFormKey());
         params.putAll(taskService.getVariables(task.getId()));
         return params;
@@ -124,7 +126,7 @@ public class ActivitiService {
     }
 
     private TaskData generateTaskData(Task task) {
-        Map<String, Object> params = getParams(task.getExecutionId());
+        Map<String, Object> params = getParamsByExecutionId(task.getExecutionId());
         TaskData taskData = new TaskData(convertMap(params));
         taskData.setActivitiDynamicId(task.getExecutionId());
         taskData.setId(task.getId());
