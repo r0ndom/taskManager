@@ -22,29 +22,39 @@
             <form:form method="POST" commandName="formData" action="/app/tasks/submitTaskForm">
                 <c:forEach items="${taskData}" var="item">
                     <c:choose>
-                        <c:when test="${isWritable}">
-                            <c:if test="${!item.writable}">
-                                <div class="form-group">
-                                    <label>${item.name}</label>
-                                    <form:input path="map['${item.id}']" class="form-control-static"
-                                                value="${item.value}"
-                                                disabled="true"/>
-                                </div>
-                            </c:if>
-                            <c:if test="${item.writable}">
-                                <div class="form-group">
-                                    <label>${item.name}</label>
-                                    <form:input path="map['${item.id}']" class="form-control-static"
-                                                value="${item.value}"/>
-                                </div>
-                            </c:if>
+                        <c:when test="${item.type == 'enum'}">
+                            <label>${item.name}</label>
+                            <form:select path="map['${item.id}']">
+                                <form:options items="${item.selectValues}"/>
+                            </form:select>
                         </c:when>
                         <c:otherwise>
-                            <div class="form-group">
-                                <label>${item.name}</label>
-                                <form:input path="map['${item.id}']" class="form-control-static" value="${item.value}"
-                                            disabled="true"/>
-                            </div>
+                            <c:choose>
+                                <c:when test="${isWritable}">
+                                    <c:if test="${!item.writable}">
+                                        <div class="form-group">
+                                            <label>${item.name}</label>
+                                            <form:input path="map['${item.id}']" class="form-control-static"
+                                                        value="${item.value}"
+                                                        disabled="true"/>
+                                        </div>
+                                    </c:if>
+                                    <c:if test="${item.writable}">
+                                        <div class="form-group">
+                                            <label>${item.name}</label>
+                                            <form:input path="map['${item.id}']" class="form-control-static"
+                                                        value="${item.value}"/>
+                                        </div>
+                                    </c:if>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="form-group">
+                                        <label>${item.name}</label>
+                                        <form:input path="map['${item.id}']" class="form-control-static" value="${item.value}"
+                                                    disabled="true"/>
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
                         </c:otherwise>
                     </c:choose>
                 </c:forEach>

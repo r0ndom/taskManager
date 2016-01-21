@@ -8,7 +8,7 @@
         <activiti:formProperty id="description" name="description" type="string" variable="description" required="true" writable="true"></activiti:formProperty>
         <activiti:formProperty id="author" name="author" type="string" variable="author" required="true" readable="false"></activiti:formProperty>
         <activiti:formProperty id="status" name="status" type="enum" variable="status" required="true">
-            <activiti:value id="development" name="новая"></activiti:value>
+            <activiti:value id="новая" name="новая"></activiti:value>
         </activiti:formProperty>
       </extensionElements>
     </userTask>
@@ -18,10 +18,10 @@
         <activiti:formProperty id="description" name="Description" type="string" variable="description" writable="false"></activiti:formProperty>
         <activiti:formProperty id="author" name="author" type="string" variable="author" required="false" readable="true" writable="false"></activiti:formProperty>
         <activiti:formProperty id="expectedTime" name="Expected Time" type="long" variable="expectedTime" required="true"></activiti:formProperty>
-        <activiti:formProperty id="status" name="status" type="enum" variable="status" required="true">
-          <activiti:value id="development" name="проставленно время"></activiti:value>
-        </activiti:formProperty>
         <activiti:formProperty id="executor" name="Executor" type="string" variable="executor" required="true" readable="false" writable="true"></activiti:formProperty>
+        <activiti:formProperty id="status" name="status" type="enum" variable="status" required="true">
+          <activiti:value id="оценённая" name="оценённая"></activiti:value>
+        </activiti:formProperty>
       </extensionElements>
     </userTask>
     <userTask id="sid-753037C1-2114-4F78-8F96-AD3B290E169A" name="in progress" activiti:assignee="kermit" activiti:formKey="inProgress">
@@ -30,10 +30,7 @@
         <activiti:formProperty id="description" name="description" type="string" variable="description" ></activiti:formProperty>
         <activiti:formProperty id="expectedTime" name="expectedTIme" type="long" variable="expectedTime"></activiti:formProperty>
         <activiti:formProperty id="status" name="status" type="enum" variable="status" required="true">
-          <activiti:value id="development" name="development"></activiti:value>
-          <activiti:value id="testing" name="testing"></activiti:value>
-          <activiti:value id="done" name="done"></activiti:value>
-          <activiti:value id="reopened" name="reopened"></activiti:value>
+          <activiti:value id="в работе" name="в работе"></activiti:value>
         </activiti:formProperty>
       </extensionElements>
     </userTask>
@@ -43,10 +40,7 @@
         <activiti:formProperty id="description" name="description" type="string" variable="description" ></activiti:formProperty>
         <activiti:formProperty id="expectedTime" name="expectedTime" type="long" variable="expectedTime" ></activiti:formProperty>
         <activiti:formProperty id="status" name="status" type="enum" variable="status" required="true">
-          <activiti:value id="development" name="development"></activiti:value>
-          <activiti:value id="testing" name="testing"></activiti:value>
-          <activiti:value id="done" name="done"></activiti:value>
-          <activiti:value id="reopened" name="reopened"></activiti:value>
+          <activiti:value id="на тестировании" name="на тестировании"></activiti:value>
         </activiti:formProperty>
       </extensionElements>
     </userTask>
@@ -56,10 +50,8 @@
         <activiti:formProperty id="description" name="description" type="string" variable="description" ></activiti:formProperty>
         <activiti:formProperty id="expectedTime" name="expectedTime" type="long" variable="expectedTime" ></activiti:formProperty>
         <activiti:formProperty id="status" name="status" type="enum" variable="status" required="true">
-          <activiti:value id="development" name="development"></activiti:value>
-          <activiti:value id="testing" name="testing"></activiti:value>
-          <activiti:value id="done" name="done"></activiti:value>
-          <activiti:value id="reopened" name="reopened"></activiti:value>
+          <activiti:value id="завершена" name="завершена"></activiti:value>
+          <activiti:value id="переоткрыта" name="переоткрыта"></activiti:value>
         </activiti:formProperty>
       </extensionElements>
     </userTask>

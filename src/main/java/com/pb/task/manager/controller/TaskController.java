@@ -47,9 +47,7 @@ public class TaskController {
     public ModelAndView showCreatePage() {
         ModelAndView mav = new ModelAndView("process/create");
         String taskId = service.startProcess();
-        List<FormProperty> formPropertyList = service.getFormProperty(taskId);
-
-        mav.addObject("taskData", FormUtils.convertTo(formPropertyList));
+        mav.addObject("taskData", FormUtils.convertTo(service.getFormProperty(taskId)));
         mav.addObject("taskId", taskId);
         mav.addObject("isWritable", true);
         return mav;
@@ -78,7 +76,7 @@ public class TaskController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ModelAndView getTaskData(@PathVariable("id") String taskId) {
         ModelAndView mav = new ModelAndView("process/details");
-        mav.addObject("taskData", service.getFormProperty(taskId));
+        mav.addObject("taskData", FormUtils.convertTo(service.getFormProperty(taskId)));
         mav.addObject("executor", userDao.getCurrentUser().getLdap());
         mav.addObject("isWritable", true);
         mav.addObject("taskId", taskId);
