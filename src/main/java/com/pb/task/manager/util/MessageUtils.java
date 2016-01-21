@@ -21,6 +21,5 @@ public class MessageUtils {
         catch (Exception e) {
             return "Unresolved key: " + key;
         }
- 
     }
 }
