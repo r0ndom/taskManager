@@ -9,7 +9,7 @@ import java.util.Properties;
 
 public class PropertyReader {
     public static Properties getProperties(String path) {
-        Resource resource = new ClassPathResource(path);
+        //Resource resource = new ClassPathResource(path);
         InputStreamReader stream = null;
         try {
             stream = new InputStreamReader(PropertyReader.class.getClassLoader().getResourceAsStream(path), "UTF-8");
