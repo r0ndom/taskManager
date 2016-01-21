@@ -61,12 +61,15 @@
         </activiti:formProperty>
       </extensionElements>
     </userTask>
+
     <exclusiveGateway id="sid-C045DD5C-7FEB-4132-A223-6D027F0884CF"></exclusiveGateway>
+
     <sequenceFlow id="sid-FAD58B01-EAC5-4ABD-B31C-DFD06BC32714" sourceRef="sid-550A27CC-345D-4A6C-8A96-E7011CE92D76" targetRef="sid-938A71D1-F817-45F2-9785-519D0CC8D09A"></sequenceFlow>
     <sequenceFlow id="sid-AFE00A65-C951-4EE5-9428-65D1E438A262" sourceRef="sid-938A71D1-F817-45F2-9785-519D0CC8D09A" targetRef="sid-A6978588-BF9A-4A52-9D08-ABB7E5594AA9"></sequenceFlow>
     <sequenceFlow id="sid-4DCC9EF3-D785-4A2E-ABA6-41E10EE0AB70" sourceRef="sid-A6978588-BF9A-4A52-9D08-ABB7E5594AA9" targetRef="sid-753037C1-2114-4F78-8F96-AD3B290E169A"></sequenceFlow>
     <sequenceFlow id="sid-1A6EE8F4-3378-4041-AAEB-CFA37F01AB64" sourceRef="sid-753037C1-2114-4F78-8F96-AD3B290E169A" targetRef="sid-2C48E2E5-50AA-4BDD-AAC1-5F4060D33FB1"></sequenceFlow>
     <sequenceFlow id="sid-E99F8DB2-F31C-485A-A367-4C4B5053AD2E" sourceRef="sid-2C48E2E5-50AA-4BDD-AAC1-5F4060D33FB1" targetRef="sid-7CE80B5C-46B9-4717-B88F-DB6DB17D3094"></sequenceFlow>
+
     <endEvent id="sid-08BA2CE5-CB33-42C1-B78E-1EA2409136AE"></endEvent>
 
     <userTask id="sid-7CE80B5C-46B9-4717-B88F-1234" name="task comleted" activiti:assignee="kermit">
@@ -80,11 +83,12 @@
     <sequenceFlow id="sid-D16151B7-23EC-495D-8EC9-FC00EB981020" sourceRef="sid-7CE80B5C-46B9-4717-B88F-1234" targetRef="sid-08BA2CE5-CB33-42C1-B78E-1EA2409136AE"></sequenceFlow>
     <sequenceFlow id="sid-88053635-17C0-497C-8CB6-C0B35C26F1F7" sourceRef="sid-7CE80B5C-46B9-4717-B88F-DB6DB17D3094" targetRef="sid-C045DD5C-7FEB-4132-A223-6D027F0884CF"></sequenceFlow>
     <sequenceFlow id="sid-36490200-0B32-46F3-9436-3A185A949A38" sourceRef="sid-C045DD5C-7FEB-4132-A223-6D027F0884CF" targetRef="sid-7CE80B5C-46B9-4717-B88F-1234">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${status=="done"}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${status=="завершена"}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="sid-8B6FC184-5127-451D-B391-1E7F8BF5BE77" sourceRef="sid-C045DD5C-7FEB-4132-A223-6D027F0884CF" targetRef="sid-A6978588-BF9A-4A52-9D08-ABB7E5594AA9">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${status=="reopened"}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${status=="переоткрыта"}]]></conditionExpression>
     </sequenceFlow>
+
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_process">
     <bpmndi:BPMNPlane bpmnElement="process" id="BPMNPlane_process">
