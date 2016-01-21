@@ -26,9 +26,11 @@
     </userTask>
     <userTask id="sid-753037C1-2114-4F78-8F96-AD3B290E169A" name="in progress" activiti:assignee="kermit" activiti:formKey="inProgress">
       <extensionElements>
-        <activiti:formProperty id="name" name="name" type="string" variable="name" ></activiti:formProperty>
-        <activiti:formProperty id="description" name="description" type="string" variable="description" ></activiti:formProperty>
-        <activiti:formProperty id="expectedTime" name="expectedTIme" type="long" variable="expectedTime"></activiti:formProperty>
+        <activiti:formProperty id="name" name="Name" type="string" variable="name" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="description" name="Description" type="string" variable="description" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="author" name="author" type="string" variable="author" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="expectedTime" name="Expected Time" type="long" variable="expectedTime" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="executor" name="Executor" type="string" variable="executor" writable="false"></activiti:formProperty>
         <activiti:formProperty id="status" name="status" type="enum" variable="status" required="true">
           <activiti:value id="в работе" name="в работе"></activiti:value>
         </activiti:formProperty>
@@ -36,9 +38,11 @@
     </userTask>
     <userTask id="sid-2C48E2E5-50AA-4BDD-AAC1-5F4060D33FB1" name="testing" activiti:assignee="kermit" activiti:formKey="onTesting">
       <extensionElements>
-        <activiti:formProperty id="name" name="name" type="string" variable="name"></activiti:formProperty>
-        <activiti:formProperty id="description" name="description" type="string" variable="description" ></activiti:formProperty>
-        <activiti:formProperty id="expectedTime" name="expectedTime" type="long" variable="expectedTime" ></activiti:formProperty>
+        <activiti:formProperty id="name" name="Name" type="string" variable="name" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="description" name="Description" type="string" variable="description" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="author" name="author" type="string" variable="author" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="expectedTime" name="Expected Time" type="long" variable="expectedTime" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="executor" name="Executor" type="string" variable="executor" writable="false"></activiti:formProperty>
         <activiti:formProperty id="status" name="status" type="enum" variable="status" required="true">
           <activiti:value id="на тестировании" name="на тестировании"></activiti:value>
         </activiti:formProperty>
@@ -46,9 +50,11 @@
     </userTask>
     <userTask id="sid-7CE80B5C-46B9-4717-B88F-DB6DB17D3094" name="set task status" activiti:assignee="kermit" activiti:formKey="setTaskStatus">
       <extensionElements>
-        <activiti:formProperty id="name" name="name" type="string" variable="name" ></activiti:formProperty>
-        <activiti:formProperty id="description" name="description" type="string" variable="description" ></activiti:formProperty>
-        <activiti:formProperty id="expectedTime" name="expectedTime" type="long" variable="expectedTime" ></activiti:formProperty>
+        <activiti:formProperty id="name" name="Name" type="string" variable="name" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="description" name="Description" type="string" variable="description" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="author" name="author" type="string" variable="author" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="expectedTime" name="Expected Time" type="long" variable="expectedTime" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="executor" name="Executor" type="string" variable="executor" writable="false"></activiti:formProperty>
         <activiti:formProperty id="status" name="status" type="enum" variable="status" required="true">
           <activiti:value id="завершена" name="завершена"></activiti:value>
           <activiti:value id="переоткрыта" name="переоткрыта"></activiti:value>
@@ -62,6 +68,7 @@
     <sequenceFlow id="sid-1A6EE8F4-3378-4041-AAEB-CFA37F01AB64" sourceRef="sid-753037C1-2114-4F78-8F96-AD3B290E169A" targetRef="sid-2C48E2E5-50AA-4BDD-AAC1-5F4060D33FB1"></sequenceFlow>
     <sequenceFlow id="sid-E99F8DB2-F31C-485A-A367-4C4B5053AD2E" sourceRef="sid-2C48E2E5-50AA-4BDD-AAC1-5F4060D33FB1" targetRef="sid-7CE80B5C-46B9-4717-B88F-DB6DB17D3094"></sequenceFlow>
     <endEvent id="sid-08BA2CE5-CB33-42C1-B78E-1EA2409136AE"></endEvent>
+
     <userTask id="sid-7CE80B5C-46B9-4717-B88F-1234" name="task comleted" activiti:assignee="kermit">
       <extensionElements>
         <activiti:formProperty id="name" name="task name" type="string" variable="name" writable="false" required="true"></activiti:formProperty>

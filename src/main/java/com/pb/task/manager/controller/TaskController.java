@@ -67,7 +67,7 @@ public class TaskController {
         String executionId = service.submitForm(data);
         String taskId = service.getTaskIdByExecutionId(executionId);
         if (data.getMap().containsKey("status")) {
-            if (data.getMap().get("status").equals("done"))
+            if (data.getMap().get("status").equals("завершена"))
                 return "redirect:/";
         }
         return "redirect:/app/tasks/show/" + taskId;
