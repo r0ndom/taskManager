@@ -3,6 +3,7 @@ package com.pb.task.manager.service;
 import com.pb.task.manager.dao.UserDao;
 import com.pb.task.manager.model.*;
 import com.pb.task.manager.model.filter.TaskSearchFilter;
+import com.pb.task.manager.util.PropertyReader;
 import org.activiti.engine.*;
 import org.activiti.engine.form.FormProperty;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -11,10 +12,7 @@ import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Mednikov on 05.01.2016.
@@ -146,7 +144,11 @@ public class ActivitiService {
     }
 
 
-    public List<String> getStatuses() {
-        return new ArrayList<>();
+    public Map<String,String> getStatuses() {
+        Properties properties = PropertyReader.getProperties("statuses.properties");
+        Map<String,String> map = new HashMap<>();
+        for (final String name: properties.stringPropertyNames())
+            map.put(name, properties.getProperty(name));
+        return map;
     }
 }

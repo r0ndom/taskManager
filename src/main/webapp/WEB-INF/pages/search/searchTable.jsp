@@ -15,10 +15,10 @@
     </tr>
     <c:forEach var="task" items="${tasks}">
         <tr id="${task.id}" onclick="window.location.href = '/app/tasks/show/${task.id}/'">
-            <td id="name">${task.name}</td>
-            <td id="status">${task.status.viewName}</td>
-            <td id="executor">${task.executor}</td>
-            <td id="author">${task.author}</td>
+            <td id="name">${task.params['name']}</td>
+            <td id="status">${task.params['status']}</td>
+            <td id="executor">${task.params['executor']}</td>
+            <td id="author">${task.params['author']}</td>
             <span id="${task.activitiDynamicId}" hidden></span>
         </tr>
     </c:forEach>
