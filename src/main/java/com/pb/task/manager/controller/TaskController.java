@@ -7,6 +7,7 @@ import com.pb.task.manager.model.TaskData;
 import com.pb.task.manager.model.filter.TaskSearchFilter;
 import com.pb.task.manager.service.ActivitiService;
 
+import com.pb.task.manager.util.FormUtils;
 import org.activiti.engine.form.FormProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,12 +48,10 @@ public class TaskController {
         ModelAndView mav = new ModelAndView("process/create");
         String taskId = service.startProcess();
         List<FormProperty> formPropertyList = service.getFormProperty(taskId);
-        for (FormProperty formProperty : formPropertyList) {
-            System.out.println("formPropertyName: " + formProperty.getName() + ", readable: " + formProperty.isReadable() + ", writable: " + formProperty.isWritable());
-        }
-        System.out.println("Create task with id: " + taskId);
-        mav.addObject("taskData", formPropertyList);
+
+        mav.addObject("taskData", FormUtils.convertTo(formPropertyList));
         mav.addObject("taskId", taskId);
+        mav.addObject("isWritable", true);
         return mav;
     }
 

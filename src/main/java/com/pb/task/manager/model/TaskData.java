@@ -28,6 +28,10 @@ public class TaskData {
         this.id = id;
     }
 
+    public TaskData(){
+
+    }
+
     public String getName() {
         return params.get("name");
     }

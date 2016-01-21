@@ -7,7 +7,9 @@
         <activiti:formProperty id="name" name="task name" type="string" variable="name" required="true" writable="true"></activiti:formProperty>
         <activiti:formProperty id="description" name="description" type="string" variable="description" required="true" writable="true"></activiti:formProperty>
         <activiti:formProperty id="author" name="author" type="string" variable="author" required="true" readable="false"></activiti:formProperty>
-        <!--<activiti:formProperty id="status" name="status" type="string" variable="status" required="true"></activiti:formProperty>-->
+        <activiti:formProperty id="status" name="status" type="enum" variable="status" required="true">
+            <activiti:value id="development" name="новая"></activiti:value>
+        </activiti:formProperty>
       </extensionElements>
     </userTask>
     <userTask id="sid-A6978588-BF9A-4A52-9D08-ABB7E5594AA9" name="define expected time" activiti:assignee="kermit" activiti:formKey="expectedTime">
@@ -16,6 +18,9 @@
         <activiti:formProperty id="description" name="Description" type="string" variable="description" writable="false"></activiti:formProperty>
         <activiti:formProperty id="author" name="author" type="string" variable="author" required="false" readable="true" writable="false"></activiti:formProperty>
         <activiti:formProperty id="expectedTime" name="Expected Time" type="long" variable="expectedTime" required="true"></activiti:formProperty>
+        <activiti:formProperty id="status" name="status" type="enum" variable="status" required="true">
+          <activiti:value id="development" name="проставленно время"></activiti:value>
+        </activiti:formProperty>
         <activiti:formProperty id="executor" name="Executor" type="string" variable="executor" required="true" readable="false" writable="true"></activiti:formProperty>
       </extensionElements>
     </userTask>
