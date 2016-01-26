@@ -21,7 +21,7 @@
     <div id="mainPage">
         <jsp:include page="../commons/header.jsp"/>
         <div class="container">
-            <form:form method="POST" commandName="formData" action="/app/tasks/submitTaskForm">
+            <form:form method="POST" commandName="formData" action="/app/tasks/submitTaskForm" cssStyle="display: inline;">
                 <c:forEach items="${taskData}" var="item">
                     <c:choose>
                         <c:when test="${item.type == 'enum'}">
@@ -83,17 +83,19 @@
                     </c:choose>
                 </c:forEach>
                 <form:hidden path="id" cssClass="form-control-static" value="${taskId}"/>
-                <c:if test="${isSubmit}">
-                    <input class="btn btn-success" style="display: inline;" value="${nextMessage}" type="submit"/>
-                </c:if>
-                <c:if test="${isEditor}">
-                    <input class="btn btn-success" style="display: inline;" onclick="window.location.href ='/app/tasks/${taskId}/'"
-                           value="${editMessage}"/>
-                </c:if>
-                <c:if test="${editDescr}">
-                    <form:hidden path="map['edit']" cssClass="form-control-static" value="true"/>
-                    <input class="btn btn-success" style="display: inline;" value="${editDesc}" type="submit"/>
-                </c:if>
+                <span>
+                    <c:if test="${isSubmit}">
+                        <input class="btn btn-success" style="display: inline;" value="${nextMessage}" type="submit"/>
+                    </c:if>
+                    <c:if test="${isEditor}">
+                        <input class="btn btn-success" style="display: inline;" onclick="window.location.href ='/app/tasks/${taskId}/'"
+                               value="${editMessage}"/>
+                    </c:if>
+                    <c:if test="${editDescr}">
+                        <form:hidden path="map['edit']" cssClass="form-control-static" value="true"/>
+                        <input class="btn btn-success" style="display: inline;" value="${editDesc}" type="submit"/>
+                    </c:if>
+                </span>
             </form:form>
             <c:if test="${isDeleted}">
                 <form action="/app/tasks/delete/${taskId}" method="POST" style="display: inline;margin:0px;padding:0px;">
