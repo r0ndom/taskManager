@@ -9,6 +9,7 @@
 <spring:message code="messages.name" var="nameMessage"/>
 <spring:message code="messages.surname" var="surnameMessage"/>
 <spring:message code="messages.ldap" var="ldapMessage"/>
+<spring:message code="messages.role" var="roleMessage"/>
 
 <tag:layout>
   <div id="mainPage">
@@ -46,6 +47,14 @@
               </div>
               <div class="col-md-6">
                 <form:input cssClass="form-control" path="lastName" required="required"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2">
+                <label>${roleMessage}</label>
+              </div>
+              <div class="col-md-6">
+                <form:select path="role" items="${roleList}" cssClass="form-control" itemLabel="roleViewName"/>
               </div>
             </div>
             <p></p>

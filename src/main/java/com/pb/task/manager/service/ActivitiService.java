@@ -1,6 +1,7 @@
 package com.pb.task.manager.service;
 
 import com.pb.task.manager.dao.UserDao;
+import com.pb.task.manager.mapper.ArchiveMapper;
 import com.pb.task.manager.model.*;
 import com.pb.task.manager.model.filter.TaskSearchFilter;
 import com.pb.task.manager.util.PropertyReader;
@@ -32,9 +33,15 @@ public class ActivitiService {
     private RepositoryService repositoryService;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private ArchiveMapper archiveMapper;
 
     public Map<String, Object> getVariables(String taskId){
          return taskService.getVariables(taskId);
+    }
+
+    public String getFormKey(String taskId){
+        return taskService.createTaskQuery().taskId(taskId).singleResult().getFormKey();
     }
 
     public String submitForm(FormData formData) {
@@ -85,6 +92,19 @@ public class ActivitiService {
         String ldap = getString(params.get("executor"));
         if (ldap == null || ldap.equals("")) {
             return !currentUser.getLdap().equals(getString(params.get("author")));
+        }
+
+        User executor = userDao.findByLdap(ldap);
+        return executor != null && currentUser.getLdap().equals(ldap);
+    }
+
+    public boolean checkDeleteAccess(String id) {
+        User currentUser = userDao.getCurrentUser();
+        Task task = taskService.createTaskQuery().taskId(id).singleResult();
+        Map<String, Object> params = getParamsByExecutionId(task.getExecutionId());
+        String ldap = getString(params.get("author"));
+        if (ldap == null || ldap.equals("")) {
+            return false;
         }
 
         User executor = userDao.findByLdap(ldap);
@@ -150,5 +170,15 @@ public class ActivitiService {
         for (final String name: properties.stringPropertyNames())
             map.put(name, properties.getProperty(name));
         return map;
+    }
+
+    public void deleteTask(String taskId) {
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        archiveMapper.put(generateTaskData(task));
+        runtimeService.deleteProcessInstance(task.getProcessInstanceId(), "");
+    }
+
+    public List<Archive> getArchivedTasks() {
+        return archiveMapper.findAll();
     }
 }

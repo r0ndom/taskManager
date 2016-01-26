@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -57,18 +58,27 @@ public class TaskController {
     public String submit(FormData data) {
         System.out.println("Form data id: " + data.getId());
         Map<String, Object> taskParams = service.getVariables(data.getId());
-
+        if (service.getFormKey(data.getId()).equals("expectedTime")&&!data.getMap().containsKey("edit")) {
+            data.getMap().put("edit", "false");
+        }
         if (!taskParams.containsKey("author") && data.getMap().get("author") == null) {
             data.getMap().put("author", userDao.getCurrentUser().getLdap());
         } else if(!taskParams.containsKey("executor") && data.getMap().get("executor") == null){
             data.getMap().put("executor", userDao.getCurrentUser().getLdap());
         }
-
+//        if (!taskParams.containsKey("startDate") || data.getMap().get("startDate") == null) {
+//            data.getMap().put("startDate", String.valueOf(new Date()));
+//        }
+//        if (!taskParams.containsKey("endDate") && data.getMap().get("endDate") == null) {
+//            data.getMap().put("endDate", String.valueOf(new Date()));
+//        }
         String executionId = service.submitForm(data);
         String taskId = service.getTaskIdByExecutionId(executionId);
         if (data.getMap().containsKey("status")) {
-            if (data.getMap().get("status").equals("завершена"))
-                return "redirect:/";
+            if (data.getMap().get("status").equals("завершена")) {
+                service.deleteTask(taskId);
+                return "redirect:/app/tasks/";
+            }
         }
         return "redirect:/app/tasks/show/" + taskId;
     }
@@ -91,7 +101,24 @@ public class TaskController {
         mav.addObject("isWritable", false);
         mav.addObject("taskId", taskId);
         mav.addObject("isEditor", service.checkUserAccess(taskId));
+        mav.addObject("isDeleted", service.checkDeleteAccess(taskId));
+        if (service.getFormKey(taskId).equals("expectedTime")) {
+            mav.addObject("editDescr", service.checkDeleteAccess(taskId));
+        }
         return mav;
+    }
+
+    @RequestMapping(value = "/archive/", method = RequestMethod.GET)
+    public ModelAndView showArchive() {
+        ModelAndView mav = new ModelAndView("archive/archive");
+        mav.addObject("tasks", service.getArchivedTasks());
+        return mav;
+    }
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
+    public String deleteTaskData(@PathVariable("id") String taskId) {
+        service.deleteTask(taskId);
+        return "redirect:/app/tasks/";
     }
 
     @ModelAttribute("formData")

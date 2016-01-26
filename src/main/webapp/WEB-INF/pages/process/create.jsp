@@ -18,35 +18,54 @@
                     <c:forEach items="${taskData}" var="item">
                         <c:choose>
                             <c:when test="${item.type == 'enum'}">
-                                <label>${item.name}</label>
-                                <form:select path="map['${item.id}']">
-                                    <form:options items="${item.selectValues}"/>
-                                </form:select>
+                                <div class="form-group row">
+                                    <div class="col-md-2">
+                                        <label>${item.name}</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <form:select path="map['${item.id}']" cssClass="form-control">
+                                            <form:options items="${item.selectValues}"/>
+                                        </form:select>
+                                    </div>
+                                </div>
                             </c:when>
                             <c:otherwise>
                                 <c:choose>
                                     <c:when test="${isWritable}">
                                         <c:if test="${!item.writable}">
-                                            <div class="form-group">
-                                                <label>${item.name}</label>
-                                                <form:input path="map['${item.id}']" class="form-control-static"
-                                                            value="${item.value}"
-                                                            disabled="true"/>
+                                            <div class="form-group row">
+                                                <div class="col-md-2">
+                                                    <label>${item.name}</label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <form:input path="map['${item.id}']" class="form-control"
+                                                                value="${item.value}"
+                                                                disabled="true"/>
+                                                </div>
                                             </div>
                                         </c:if>
                                         <c:if test="${item.writable}">
-                                            <div class="form-group">
-                                                <label>${item.name}</label>
-                                                <form:input path="map['${item.id}']" class="form-control-static"
-                                                            value="${item.value}"/>
+                                            <div class="form-group row">
+                                                <div class="col-md-2">
+                                                    <label>${item.name}</label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <form:input path="map['${item.id}']" class="form-control"
+                                                                value="${item.value}"/>
+                                                </div>
                                             </div>
                                         </c:if>
                                     </c:when>
                                     <c:otherwise>
-                                        <div class="form-group">
-                                            <label>${item.name}</label>
-                                            <form:input path="map['${item.id}']" class="form-control-static" value="${item.value}"
-                                                        disabled="true"/>
+                                        <div class="form-group row">
+                                            <div class="col-md-2">
+                                                <label>${item.name}</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <form:input path="map['${item.id}']" class="form-control"
+                                                            value="${item.value}"
+                                                            disabled="true"/>
+                                            </div>
                                         </div>
                                     </c:otherwise>
                                 </c:choose>
@@ -54,7 +73,7 @@
                         </c:choose>
                     </c:forEach>
                     <div hidden class="form-group">
-                        <form:input path="id" class="form-control-static" value="${taskId}"/>
+                        <form:input path="id" class="form-control" value="${taskId}"/>
                     </div>
                     <button type="submit" class="btn btn-success">${createMessage}</button>
                     <button type="reset" class="btn btn-default">${resetMessage}</button>

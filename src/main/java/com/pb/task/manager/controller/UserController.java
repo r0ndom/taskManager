@@ -1,6 +1,8 @@
 package com.pb.task.manager.controller;
 
 import com.pb.task.manager.dao.UserDao;
+import com.pb.task.manager.model.Role;
+import com.pb.task.manager.model.Status;
 import com.pb.task.manager.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,13 +29,15 @@ public class UserController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
-    public String createPage() {
-        return "users/create";
+    public ModelAndView createPage() {
+        ModelAndView mav = new ModelAndView("users/create");
+        mav.addObject("roleList", Role.getPermittedValues());
+        return mav;
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(User user) {
-        userDao.createDeveloper(user);
+        userDao.create(user);
         return "redirect:/app/users/";
     }
 

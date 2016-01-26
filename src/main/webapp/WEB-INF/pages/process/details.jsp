@@ -14,6 +14,8 @@
 <spring:message code="messages.edit" var="editMessage"/>
 <spring:message code="messages.back" var="backMessage"/>
 <spring:message code="messages.next" var="nextMessage"/>
+<spring:message code="messages.delete" var="deleteMessage"/>
+<spring:message code="messages.editDesc" var="editDesc"/>
 
 <tag:layout>
     <div id="mainPage">
@@ -23,51 +25,83 @@
                 <c:forEach items="${taskData}" var="item">
                     <c:choose>
                         <c:when test="${item.type == 'enum'}">
-                            <label>${item.name}</label>
-                            <form:select path="map['${item.id}']">
-                                <form:options items="${item.selectValues}"/>
-                            </form:select>
+                            <p></p>
+
+                            <div class="form-group row">
+                                <div class="col-md-2">
+                                    <label>${item.name}</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <form:select path="map['${item.id}']" cssClass="form-control">
+                                        <form:options items="${item.selectValues}"/>
+                                    </form:select>
+                                </div>
+                            </div>
+                            <p></p>
                         </c:when>
                         <c:otherwise>
                             <c:choose>
                                 <c:when test="${isWritable}">
                                     <c:if test="${!item.writable}">
-                                        <div class="form-group">
-                                            <label>${item.name}</label>
-                                            <form:input path="map['${item.id}']" class="form-control-static"
-                                                        value="${item.value}"
-                                                        disabled="true"/>
+                                        <div class="form-group row">
+                                            <div class="col-md-2">
+                                                <label>${item.name}</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <form:input path="map['${item.id}']" cssClass="form-control"
+                                                            value="${item.value}"
+                                                            disabled="true"/>
+                                            </div>
                                         </div>
                                     </c:if>
                                     <c:if test="${item.writable}">
-                                        <div class="form-group">
-                                            <label>${item.name}</label>
-                                            <form:input path="map['${item.id}']" class="form-control-static"
-                                                        value="${item.value}"/>
+                                        <div class="form-group row">
+                                            <div class="col-md-2">
+                                                <label>${item.name}</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <form:input path="map['${item.id}']" cssClass="form-control"
+                                                            value="${item.value}"/>
+                                            </div>
                                         </div>
                                     </c:if>
                                 </c:when>
                                 <c:otherwise>
-                                    <div class="form-group">
-                                        <label>${item.name}</label>
-                                        <form:input path="map['${item.id}']" class="form-control-static" value="${item.value}"
-                                                    disabled="true"/>
+                                    <div class="form-group row">
+                                        <div class="col-md-2">
+                                            <label>${item.name}</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <form:input path="map['${item.id}']" cssClass="form-control"
+                                                        value="${item.value}"
+                                                        disabled="true"/>
+                                        </div>
                                     </div>
                                 </c:otherwise>
                             </c:choose>
                         </c:otherwise>
                     </c:choose>
                 </c:forEach>
-                <form:hidden path="id" class="form-control-static" value="${taskId}"/>
+                <form:hidden path="id" cssClass="form-control-static" value="${taskId}"/>
                 <c:if test="${isSubmit}">
-                    <input class="btn btn-success" value="${nextMessage}" type="submit"/>
+                    <input class="btn btn-success" style="display: inline;" value="${nextMessage}" type="submit"/>
                 </c:if>
                 <c:if test="${isEditor}">
-                    <input class="btn btn-success" onclick="window.location.href ='/app/tasks/${taskId}/'"
+                    <input class="btn btn-success" style="display: inline;" onclick="window.location.href ='/app/tasks/${taskId}/'"
                            value="${editMessage}"/>
                 </c:if>
-                <input class="btn btn-default" onclick="window.location.href ='/app/tasks/'" value="${backMessage}"/>
+                <c:if test="${editDescr}">
+                    <form:hidden path="map['edit']" cssClass="form-control-static" value="true"/>
+                    <input class="btn btn-success" style="display: inline;" value="${editDesc}" type="submit"/>
+                </c:if>
             </form:form>
+            <c:if test="${isDeleted}">
+                <form action="/app/tasks/delete/${taskId}" method="POST" style="display: inline;margin:0px;padding:0px;">
+                    <input type="submit" class="btn btn-danger" value="${deleteMessage}"/>
+                </form>
+            </c:if>
+
+            <input class="btn btn-default" onclick="window.location.href ='/app/tasks/'" value="${backMessage}" style="display: inline"/>
         </div>
         <jsp:include page="../commons/footer.jsp"/>
     </div>

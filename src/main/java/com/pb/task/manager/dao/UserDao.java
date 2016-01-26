@@ -21,16 +21,9 @@ public class UserDao {
     @Autowired
     private UserMapper mapper;
 
-    public void createDeveloper(User user) {
-        create(user, Role.ROLE_DEVELOPER);
-    }
-
-    public void createManager(User user) { create(user, Role.ROLE_MANAGER); }
-
-    public void create(User user, Role role) {
+    public void create(User user) {
         String encodedPassword = passwordEncoder.encode(DEFAULT_PASSWORD);
         user.setPassword(encodedPassword);
-        user.setRole(role);
         mapper.create(user);
     }
 

@@ -7,16 +7,19 @@
 	http://www.springframework.org/schema/security/spring-security.xsd">
 
     <http auto-config="true" use-expressions="true">
-        <intercept-url pattern="/app/**" access="isAuthenticated()" />
-
+        <intercept-url pattern="/app/tasks/**" access="hasAnyRole('ROLE_ADMIN', 'ROLE_DEVELOPER', 'ROLE_TESTER', 'ROLE_MANAGER')" />
+        <intercept-url pattern="/app/users/**" access="hasRole('ROLE_CONTROL')"/>
         <form-login login-page="/login"
                     username-parameter="username"
                     password-parameter="password"
                     default-target-url="/app/tasks/"
-                    authentication-failure-url="/login?error"/>
+                    authentication-failure-url="/login?error"
+                    authentication-success-handler-ref="simpleAuthenticationSuccessHandler"/>
 
         <logout logout-success-url="/login?logout"/>
     </http>
+
+    <beans:bean id="simpleAuthenticationSuccessHandler" class="com.pb.task.manager.service.security.SimpleAuthenticationSuccessHandler"/>
 
     <beans:bean id="userAuthenticationProvider" class="com.pb.task.manager.service.security.UserAuthenticationProvider"/>
 

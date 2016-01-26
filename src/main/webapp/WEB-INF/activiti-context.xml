@@ -7,7 +7,7 @@
 
 
     <bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
-        <property name="databaseType" value="h2" />
+        <property name="databaseType" value="postgres" />
         <property name="dataSource" ref="dataSource" />
         <property name="transactionManager" ref="transactionManager" />
         <property name="databaseSchemaUpdate" value="true" />
