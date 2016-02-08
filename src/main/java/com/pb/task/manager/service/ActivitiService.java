@@ -7,6 +7,7 @@ import com.pb.task.manager.model.filter.TaskSearchFilter;
 import com.pb.task.manager.util.PropertyReader;
 import org.activiti.engine.*;
 import org.activiti.engine.form.FormProperty;
+import org.activiti.engine.form.TaskFormData;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
@@ -56,6 +57,10 @@ public class ActivitiService {
         return task.getId();
     }
 
+    public String getTaskExecutionIdById(String taskId) {
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        return task.getExecutionId();
+    }
 
     public List<FormProperty> getFormProperty(String id) {
         System.out.println("getFormProperty by id: " + id);
