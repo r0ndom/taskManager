@@ -92,8 +92,8 @@
                                value="${editMessage}"/>
                     </c:if>
                     <c:if test="${editDescr}">
-                        <form:hidden path="map['edit']" cssClass="form-control-static" value="true"/>
-                        <input class="btn btn-success" style="display: inline;" value="${editDesc}" type="submit"/>
+                        <input class="btn btn-success" style="display: inline;" onclick="window.location.href ='/app/tasks/editTask/${taskId}/'"
+                               value="${editDesc}"/>
                     </c:if>
                 </span>
             </form:form>

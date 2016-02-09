@@ -48,6 +48,7 @@ public class ActivitiService {
     public String submitForm(FormData formData) {
         String id = formData.getId();
         Task task = taskService.createTaskQuery().taskId(id).singleResult();
+        System.out.println("task.getName(): " + task.getName());
         formService.submitTaskFormData(id, formData.getMap());
         return task.getExecutionId();
     }
@@ -113,9 +114,7 @@ public class ActivitiService {
         if (ldap == null || ldap.equals("")) {
             return false;
         }
-
-        User executor = userDao.findByLdap(ldap);
-        return executor != null && currentUser.getLdap().equals(ldap);
+        return currentUser.getLdap().equals(ldap);
     }
 
     private Map<String, Object> getParamsByExecutionId(String id) {

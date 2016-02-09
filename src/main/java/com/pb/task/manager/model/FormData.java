@@ -1,5 +1,6 @@
 package com.pb.task.manager.model;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -17,6 +18,10 @@ public class FormData {
         this.map = map;
     }
 
+    public FormData(String id) {
+        this.id = id;
+    }
+
     public String getId() {
         return id;
     }
@@ -31,5 +36,13 @@ public class FormData {
 
     public void setMap(Map<String, String> map) {
         this.map = map;
+    }
+
+    public FormData put(String variableName, String value) {
+        if(map == null){
+            map = new HashMap<>();
+        }
+        map.put(variableName, value);
+        return this;
     }
 }

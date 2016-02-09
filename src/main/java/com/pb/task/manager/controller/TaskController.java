@@ -91,6 +91,35 @@ public class TaskController {
         return "redirect:/app/tasks/show/" + taskId;
     }
 
+    @RequestMapping(value = "/editTask/{id}", method = RequestMethod.GET)
+    public ModelAndView edit(@PathVariable("id") String taskId) {
+        ModelAndView mav = new ModelAndView("process/details");
+        FormData formData = new FormData(taskId);
+        List<FormProperty> currentFormPropertyList = service.getFormProperty(taskId);
+        for(FormProperty formProperty: currentFormPropertyList) {
+            if(formProperty.isRequired()){
+                formData.put(formProperty.getId(), "");
+            }
+        }
+        formData.put("edit", "true");
+        String executionId = service.submitForm(formData);
+        String nextTaskId = service.getTaskIdByExecutionId(executionId);
+        List<FormProperty> nextFormPropertyList = service.getFormProperty(nextTaskId);
+        Iterator<FormProperty> iterator = nextFormPropertyList.iterator();
+        while (iterator.hasNext()){
+            FormProperty formProperty = iterator.next();
+            if(Objects.equals(formProperty.getId(), "author") && formProperty.isRequired()) {
+                iterator.remove();
+            }
+        }
+        mav.addObject("taskData", FormUtils.convertTo(nextFormPropertyList));
+        mav.addObject("isWritable", true);
+        mav.addObject("taskId", nextTaskId);
+        mav.addObject("isSubmit", true);
+        return mav;
+    }
+
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ModelAndView getTaskData(@PathVariable("id") String taskId) {
         ModelAndView mav = new ModelAndView("process/details");
@@ -110,6 +139,9 @@ public class TaskController {
             if(Objects.equals(formProperty.getId(), "endDate") && formProperty.isRequired()) {
                 iterator.remove();
             }
+            if(Objects.equals(formProperty.getId(), "edit")) {
+                iterator.remove();
+            }
         }
         mav.addObject("taskData", FormUtils.convertTo(formPropertyList));
         mav.addObject("isWritable", true);
@@ -121,14 +153,20 @@ public class TaskController {
     @RequestMapping(value = "/show/{id}", method = RequestMethod.GET)
     public ModelAndView showTaskData(@PathVariable("id") String taskId) {
         ModelAndView mav = new ModelAndView("process/details");
-        mav.addObject("taskData", service.getFormProperty(taskId));
+        List<FormProperty> formPropertyList = service.getFormProperty(taskId);
+        Iterator<FormProperty> iterator = formPropertyList.iterator();
+        while (iterator.hasNext()){
+            FormProperty formProperty = iterator.next();
+            if(Objects.equals(formProperty.getId(), "edit")) {
+                iterator.remove();
+                mav.addObject("editDescr", service.checkDeleteAccess(taskId));
+            }
+        }
+        mav.addObject("taskData", formPropertyList);
         mav.addObject("isWritable", false);
         mav.addObject("taskId", taskId);
         mav.addObject("isEditor", service.checkUserAccess(taskId));
         mav.addObject("isDeleted", service.checkDeleteAccess(taskId));
-        if (service.getFormKey(taskId).equals("expectedTime")) {
-            mav.addObject("editDescr", service.checkDeleteAccess(taskId));
-        }
         return mav;
     }
 
