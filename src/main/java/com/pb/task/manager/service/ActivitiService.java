@@ -62,9 +62,11 @@ public class ActivitiService {
         return task.getExecutionId();
     }
 
-    public List<FormProperty> getFormProperty(String id) {
-        System.out.println("getFormProperty by id: " + id);
-        return formService.getTaskFormData(id).getFormProperties();
+    public List<FormProperty> getFormProperty(String taskId) {
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        System.out.println("task.getName(): " + task.getName());
+        System.out.println("getFormProperty by id: " + taskId);
+        return formService.getTaskFormData(taskId).getFormProperties();
     }
 
     public List<TaskData> findAll() {

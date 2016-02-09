@@ -17,10 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Mike on 12/31/2015.
@@ -48,7 +45,15 @@ public class TaskController {
     public ModelAndView showCreatePage() {
         ModelAndView mav = new ModelAndView("process/create");
         String taskId = service.startProcess();
-        mav.addObject("taskData", FormUtils.convertTo(service.getFormProperty(taskId)));
+        List<FormProperty> formPropertyList = service.getFormProperty(taskId);
+        Iterator<FormProperty> iterator = formPropertyList.iterator();
+        while (iterator.hasNext()){
+            FormProperty formProperty = iterator.next();
+            if(Objects.equals(formProperty.getId(), "author") && formProperty.isRequired()) {
+                iterator.remove();
+            }
+        }
+        mav.addObject("taskData", FormUtils.convertTo(formPropertyList));
         mav.addObject("taskId", taskId);
         mav.addObject("isWritable", true);
         return mav;
@@ -57,21 +62,24 @@ public class TaskController {
     @RequestMapping(value = "/submitTaskForm", method = RequestMethod.POST)
     public String submit(FormData data) {
         System.out.println("Form data id: " + data.getId());
-        Map<String, Object> taskParams = service.getVariables(data.getId());
+        List<FormProperty> formPropertyList = service.getFormProperty(data.getId());
+        for(FormProperty formProperty: formPropertyList){
+            if(Objects.equals(formProperty.getId(), "author") && formProperty.isRequired()) {
+                data.getMap().put("author", userDao.getCurrentUser().getLdap());
+            }
+            if(Objects.equals(formProperty.getId(), "executor") && formProperty.isRequired()) {
+                data.getMap().put("executor", userDao.getCurrentUser().getLdap());
+            }
+            if(Objects.equals(formProperty.getId(), "startDate") && formProperty.isRequired()) {
+                data.getMap().put("startDate", new Date().toString());
+            }
+            if(Objects.equals(formProperty.getId(), "endDate") && formProperty.isRequired()) {
+                data.getMap().put("endDate", new Date().toString());
+            }
+        }
         if (service.getFormKey(data.getId()).equals("expectedTime")&&!data.getMap().containsKey("edit")) {
             data.getMap().put("edit", "false");
         }
-        if (!taskParams.containsKey("author") && data.getMap().get("author") == null) {
-            data.getMap().put("author", userDao.getCurrentUser().getLdap());
-        } else if(!taskParams.containsKey("executor") && data.getMap().get("executor") == null){
-            data.getMap().put("executor", userDao.getCurrentUser().getLdap());
-        }
-//        if (!taskParams.containsKey("startDate") || data.getMap().get("startDate") == null) {
-//            data.getMap().put("startDate", String.valueOf(new Date()));
-//        }
-//        if (!taskParams.containsKey("endDate") && data.getMap().get("endDate") == null) {
-//            data.getMap().put("endDate", String.valueOf(new Date()));
-//        }
         String executionId = service.submitForm(data);
         String taskId = service.getTaskIdByExecutionId(executionId);
         if (data.getMap().containsKey("status")) {
@@ -86,8 +94,24 @@ public class TaskController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ModelAndView getTaskData(@PathVariable("id") String taskId) {
         ModelAndView mav = new ModelAndView("process/details");
-        mav.addObject("taskData", FormUtils.convertTo(service.getFormProperty(taskId)));
-        mav.addObject("executor", userDao.getCurrentUser().getLdap());
+        List<FormProperty> formPropertyList = service.getFormProperty(taskId);
+        Iterator<FormProperty> iterator = formPropertyList.iterator();
+        while (iterator.hasNext()){
+            FormProperty formProperty = iterator.next();
+            if(Objects.equals(formProperty.getId(), "author") && formProperty.isRequired()) {
+                iterator.remove();
+            }
+            if(Objects.equals(formProperty.getId(), "executor") && formProperty.isRequired()) {
+                iterator.remove();
+            }
+            if(Objects.equals(formProperty.getId(), "startDate") && formProperty.isRequired()) {
+                iterator.remove();
+            }
+            if(Objects.equals(formProperty.getId(), "endDate") && formProperty.isRequired()) {
+                iterator.remove();
+            }
+        }
+        mav.addObject("taskData", FormUtils.convertTo(formPropertyList));
         mav.addObject("isWritable", true);
         mav.addObject("taskId", taskId);
         mav.addObject("isSubmit", true);
