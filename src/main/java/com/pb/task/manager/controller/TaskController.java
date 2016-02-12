@@ -1,6 +1,7 @@
 package com.pb.task.manager.controller;
 
 import com.pb.task.manager.dao.UserDao;
+import com.pb.task.manager.model.Comment;
 import com.pb.task.manager.model.FormData;
 import com.pb.task.manager.model.Role;
 import com.pb.task.manager.model.TaskData;
@@ -52,8 +53,12 @@ public class TaskController {
             if(Objects.equals(formProperty.getId(), "author") && formProperty.isRequired()) {
                 iterator.remove();
             }
+            if(Objects.equals(formProperty.getId(), "executor") && formProperty.isRequired()) {
+                iterator.remove();
+            }
         }
         mav.addObject("taskData", FormUtils.convertTo(formPropertyList));
+        mav.addObject("userList", userDao.findAll());
         mav.addObject("taskId", taskId);
         mav.addObject("isWritable", true);
         return mav;
@@ -67,9 +72,9 @@ public class TaskController {
             if(Objects.equals(formProperty.getId(), "author") && formProperty.isRequired()) {
                 data.getMap().put("author", userDao.getCurrentUser().getLdap());
             }
-            if(Objects.equals(formProperty.getId(), "executor") && formProperty.isRequired()) {
-                data.getMap().put("executor", userDao.getCurrentUser().getLdap());
-            }
+//            if(Objects.equals(formProperty.getId(), "executor") && formProperty.isRequired()) {
+//                data.getMap().put("executor", userDao.getCurrentUser().getLdap());
+//            }
             if(Objects.equals(formProperty.getId(), "startDate") && formProperty.isRequired()) {
                 data.getMap().put("startDate", new Date().toString());
             }
@@ -111,6 +116,9 @@ public class TaskController {
             if(Objects.equals(formProperty.getId(), "author") && formProperty.isRequired()) {
                 iterator.remove();
             }
+            if(Objects.equals(formProperty.getId(), "executor") && formProperty.isRequired()) {
+                iterator.remove();
+            }
         }
         mav.addObject("taskData", FormUtils.convertTo(nextFormPropertyList));
         mav.addObject("isWritable", true);
@@ -125,7 +133,7 @@ public class TaskController {
         ModelAndView mav = new ModelAndView("process/details");
         List<FormProperty> formPropertyList = service.getFormProperty(taskId);
         Iterator<FormProperty> iterator = formPropertyList.iterator();
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             FormProperty formProperty = iterator.next();
             if(Objects.equals(formProperty.getId(), "author") && formProperty.isRequired()) {
                 iterator.remove();
@@ -193,12 +201,17 @@ public class TaskController {
         return new TaskSearchFilter();
     }
 
+    @ModelAttribute("comment")
+    public Comment getComment() {
+        return new Comment();
+    }
+
     private ModelAndView getMav(List<TaskData> list) {
         ModelAndView mav = new ModelAndView("index");
         mav.addObject("tasks", list);
         mav.addObject("statusList", service.getStatuses());
-        mav.addObject("executorList", userDao.findByRole(Role.ROLE_DEVELOPER));
-        mav.addObject("authorList", userDao.findByRole(Role.ROLE_MANAGER));
+        mav.addObject("executorList", userDao.findAll());
+        mav.addObject("authorList", userDao.findAll());
         return mav;
     }
 }

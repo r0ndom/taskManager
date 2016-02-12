@@ -75,6 +75,16 @@
                     <div hidden class="form-group">
                         <form:input path="id" class="form-control" value="${taskId}"/>
                     </div>
+                    <div class="form-group row">
+                        <div class="col-md-2">
+                            <label>Executors:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <form:select path="map['executor']" cssClass="form-control" itemValue="ldap">
+                                <form:options items="${userList}"/>
+                            </form:select>
+                        </div>
+                    </div>
                     <button type="submit" class="btn btn-success">${createMessage}</button>
                     <button type="reset" class="btn btn-default">${resetMessage}</button>
                 </form:form>

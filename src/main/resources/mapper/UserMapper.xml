@@ -19,7 +19,7 @@
     </select>
 
     <select id="findAll" resultMap="getUserResultMap">
-        select * from users;
+        select * from users WHERE role!='ROLE_CONTROL';
     </select>
 
     <select id="findByLdap" resultMap="getUserResultMap">

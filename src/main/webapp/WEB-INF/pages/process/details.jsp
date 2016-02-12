@@ -104,6 +104,7 @@
             </c:if>
 
             <input class="btn btn-default" onclick="window.location.href ='/app/tasks/'" value="${backMessage}" style="display: inline"/>
+            <%--<input class="btn btn-default" onclick="" value="${backMessage}" style="display: inline"/>--%>
         </div>
         <jsp:include page="../commons/footer.jsp"/>
     </div>
