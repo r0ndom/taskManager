@@ -18,13 +18,27 @@
 <spring:message code="messages.editDesc" var="editDesc"/>
 
 <tag:layout>
+    <script>
+        function addComment() {
+            var taskId= $("#taskId").val();
+            var text = $("#text").val();
+            $.ajax({
+                url: "/app/tasks/addComment",
+                method: "POST",
+                data: {"taskId": taskId, "text": text},
+                success: function () {
+                    location.reload();
+                }
+            });
+        }
+    </script>
     <div id="mainPage">
         <jsp:include page="../commons/header.jsp"/>
         <div class="container">
             <form:form method="POST" commandName="formData" action="/app/tasks/submitTaskForm" cssStyle="display: inline;">
                 <c:forEach items="${taskData}" var="item">
                     <c:choose>
-                        <c:when test="${item.type == 'enum'}">
+                        <c:when test="${(item.type == 'enum') || item.type == 'users'}">
                             <p></p>
 
                             <div class="form-group row">
@@ -45,8 +59,15 @@
                                     <label>${item.name}</label>
                                 </div>
                                 <div class="col-md-4">
-                                    <form:textarea path="map['${item.id}']" rows="5" cols="30" cssClass="form-control"
-                                                   value="${item.value}"/>
+                                    <c:choose>
+                                        <c:when test="${!item.writable}">
+                                            <textarea class="form-control" name="map['${item.id}']" disabled>${item.value}</textarea>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <form:textarea path="map['${item.id}']"
+                                                           rows="5" cols="30" cssClass="form-control"/>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </div>
                             </div>
                         </c:when>
@@ -97,6 +118,21 @@
                 <span>
                     <c:if test="${isSubmit}">
                         <input class="btn btn-success" style="display: inline;" value="${nextMessage}" type="submit"/>
+                        <div id="addCommentDiv" class="col-md-2">
+                            <input id="taskId" name="taskId" value="${execId}" hidden/>
+                            <label>Comment text:</label>
+                            <input id="text" name="text" class="form-control"/>
+                            <input class="btn btn-success" onclick="addComment()" value="Add comment"/>
+                        </div>
+                        <table>
+                            <c:forEach items="${comments}" var="com">
+                                <tr>
+                                    <td>User:${com.ldap}</td>
+                                    <td>Text:${com.text}</td>
+                                    <td>Date:${com.date}</td>
+                                </tr>
+                            </c:forEach>
+                        </table>
                     </c:if>
                     <c:if test="${isEditor}">
                         <input class="btn btn-success" style="display: inline;" onclick="window.location.href ='/app/tasks/${taskId}/'"

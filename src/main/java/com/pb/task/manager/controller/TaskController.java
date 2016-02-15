@@ -31,6 +31,8 @@ public class TaskController {
     private ActivitiService service;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private FormUtils formUtils;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView showSearchPage() {
@@ -53,12 +55,8 @@ public class TaskController {
             if(Objects.equals(formProperty.getId(), "author") && formProperty.isRequired()) {
                 iterator.remove();
             }
-            if(Objects.equals(formProperty.getId(), "executor") && formProperty.isRequired()) {
-                iterator.remove();
-            }
         }
-        mav.addObject("taskData", FormUtils.convertTo(formPropertyList));
-        mav.addObject("userList", userDao.findAll());
+        mav.addObject("taskData", formUtils.convertTo(formPropertyList));
         mav.addObject("taskId", taskId);
         return mav;
     }
@@ -71,9 +69,6 @@ public class TaskController {
             if(Objects.equals(formProperty.getId(), "author") && formProperty.isRequired()) {
                 data.getMap().put("author", userDao.getCurrentUser().getLdap());
             }
-//            if(Objects.equals(formProperty.getId(), "executor") && formProperty.isRequired()) {
-//                data.getMap().put("executor", userDao.getCurrentUser().getLdap());
-//            }
             if(Objects.equals(formProperty.getId(), "startDate") && formProperty.isRequired()) {
                 data.getMap().put("startDate", new Date().toString());
             }
@@ -115,11 +110,8 @@ public class TaskController {
             if(Objects.equals(formProperty.getId(), "author") && formProperty.isRequired()) {
                 iterator.remove();
             }
-            if(Objects.equals(formProperty.getId(), "executor") && formProperty.isRequired()) {
-                iterator.remove();
-            }
         }
-        mav.addObject("taskData", FormUtils.convertTo(nextFormPropertyList));
+        mav.addObject("taskData", formUtils.convertTo(nextFormPropertyList));
         mav.addObject("isWritable", true);
         mav.addObject("taskId", nextTaskId);
         mav.addObject("isSubmit", true);
@@ -137,9 +129,6 @@ public class TaskController {
             if(Objects.equals(formProperty.getId(), "author") && formProperty.isRequired()) {
                 iterator.remove();
             }
-            if(Objects.equals(formProperty.getId(), "executor") && formProperty.isRequired()) {
-                iterator.remove();
-            }
             if(Objects.equals(formProperty.getId(), "startDate") && formProperty.isRequired()) {
                 iterator.remove();
             }
@@ -150,9 +139,12 @@ public class TaskController {
                 iterator.remove();
             }
         }
-        mav.addObject("taskData", FormUtils.convertTo(formPropertyList));
+        String id = service.getTaskExecutionIdById(taskId);
+        mav.addObject("taskData", formUtils.convertTo(formPropertyList));
+        mav.addObject("comments", service.getComments(id));
         mav.addObject("isWritable", true);
         mav.addObject("taskId", taskId);
+        mav.addObject("execId", id);
         mav.addObject("isSubmit", true);
         return mav;
     }
@@ -188,6 +180,12 @@ public class TaskController {
     public String deleteTaskData(@PathVariable("id") String taskId) {
         service.deleteTask(taskId);
         return "redirect:/app/tasks/";
+    }
+
+    @RequestMapping(value = "/addComment", method = RequestMethod.POST)
+    public String addComment(Comment comment) {
+        service.createComment(comment.getTaskId(), comment.getText());
+        return "redirect:/app/tasks/" + comment.getTaskId();
     }
 
     @ModelAttribute("formData")

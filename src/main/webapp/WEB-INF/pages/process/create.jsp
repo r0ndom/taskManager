@@ -17,7 +17,7 @@
                 <form:form method="POST" commandName="formData" action="/app/tasks/submitTaskForm">
                     <c:forEach items="${taskData}" var="item">
                         <c:choose>
-                            <c:when test="${item.type == 'enum'}">
+                            <c:when test="${(item.type == 'enum') || item.type == 'users'}">
                                 <div class="form-group row">
                                     <div class="col-md-2">
                                         <label>${item.name}</label>
@@ -57,16 +57,6 @@
                     </c:forEach>
                     <div hidden class="form-group">
                         <form:input path="id" class="form-control" value="${taskId}"/>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-md-2">
-                            <label>Executors:</label>
-                        </div>
-                        <div class="col-md-4">
-                            <form:select path="map['executor']" cssClass="form-control" itemValue="ldap">
-                                <form:options items="${userList}"/>
-                            </form:select>
-                        </div>
                     </div>
                     <button type="submit" class="btn btn-success">${createMessage}</button>
                     <button type="reset" class="btn btn-default">${resetMessage}</button>

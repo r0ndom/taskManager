@@ -2,6 +2,7 @@ package com.pb.task.manager.service;
 
 import com.pb.task.manager.dao.UserDao;
 import com.pb.task.manager.mapper.ArchiveMapper;
+import com.pb.task.manager.mapper.CommentMapper;
 import com.pb.task.manager.model.*;
 import com.pb.task.manager.model.filter.TaskSearchFilter;
 import com.pb.task.manager.util.PropertyReader;
@@ -36,6 +37,8 @@ public class ActivitiService {
     private UserDao userDao;
     @Autowired
     private ArchiveMapper archiveMapper;
+    @Autowired
+    private CommentMapper commentMapper;
 
     public Map<String, Object> getVariables(String taskId){
          return taskService.getVariables(taskId);
@@ -49,8 +52,19 @@ public class ActivitiService {
         String id = formData.getId();
         Task task = taskService.createTaskQuery().taskId(id).singleResult();
         System.out.println("task.getName(): " + task.getName());
+        removeLongStringSymbols(formData.getMap());
         formService.submitTaskFormData(id, formData.getMap());
         return task.getExecutionId();
+    }
+
+    //FIXME rename method to some another name
+    private void removeLongStringSymbols(Map<String, String> map) {
+        for (Map.Entry<String, String> entry : map.entrySet())
+        {
+            if (entry.getValue().length() > 255) {
+                entry.setValue(entry.getValue().substring(0, 255));
+            }
+        }
     }
 
     public String getTaskIdByExecutionId(String executionId) {
@@ -72,7 +86,29 @@ public class ActivitiService {
 
     public List<TaskData> findAll() {
         List<Task> query = taskService.createTaskQuery().list();
+        deleteUnusedTask(query);
         return generateTaskDataList(query);
+    }
+
+    private void deleteUnusedTask(List<Task> tasks) {
+        Iterator<Task> iterator = tasks.iterator();
+        while (iterator.hasNext()){
+            Task task = iterator.next();
+            if (getFormKey(task.getId()).equals("createTask") && isTaskHasEmptyFields(task)) {
+                runtimeService.deleteProcessInstance(task.getProcessInstanceId(), "");
+                iterator.remove();
+            }
+        }
+    }
+
+    public boolean isTaskHasEmptyFields(Task task) {
+        List<FormProperty> formProperties = getFormProperty(task.getId());
+        for (FormProperty property : formProperties) {
+            if (property.getValue() == null || property.getValue().isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public List<TaskData> search(TaskSearchFilter filter) {
@@ -83,13 +119,14 @@ public class ActivitiService {
             String status = params.get("status") != null ? getString(params.get("status")) : "new";
             String author = getString(params.get("author"));
             String executor = getString(params.get("executor"));
-            if (status.equals(filter.getStatus())||filter.getStatus().equals("all")) {
+            if (status.equals(filter.getStatus())||filter.getStatus().equals("")) {
                 if (author.equals(filter.getAuthor())||filter.getAuthor().equals(""))
                     if(executor.equals(filter.getExecutor())||filter.getExecutor().equals(""))
                         result.add(task);
             }
 
         }
+        deleteUnusedTask(result);
         return generateTaskDataList(result);
     }
 
@@ -161,7 +198,7 @@ public class ActivitiService {
         return object != null ? String.valueOf(object) : "";
     }
 
-    private Map<String, String> convertMap(Map<String, Object> params){
+    private Map<String, String> convertMap(Map<String, Object> params) {
         Map<String, String> newParams = new HashMap<>();
         for(Map.Entry<String, Object> entry: params.entrySet()) {
             newParams.put(entry.getKey(), getString(entry.getValue()));
@@ -182,6 +219,24 @@ public class ActivitiService {
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         archiveMapper.put(generateTaskData(task));
         runtimeService.deleteProcessInstance(task.getProcessInstanceId(), "");
+    }
+
+    public void createComment(String taskId, String text) {
+        Comment comment = new Comment(null, taskId, userDao.getCurrentUser().getLdap(), text, new Date());
+        commentMapper.create(comment);
+    }
+
+    public void updateComment(Comment comment) {
+        comment.setDate(new Date());
+        commentMapper.update(comment);
+    }
+
+    public List<Comment> getComments(String taskId) {
+        return commentMapper.findByTaskId(taskId);
+    }
+
+    public void deleteComment(Long id) {
+        commentMapper.delete(id);
     }
 
     public List<Archive> getArchivedTasks() {

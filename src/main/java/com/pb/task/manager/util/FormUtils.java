@@ -13,10 +13,9 @@ import java.util.Map;
  * Created by stas on 21.01.16.
  */
 @Component
-@Scope("singleton")
 public class FormUtils {
 
-    public static List<FormFieldData> convertTo(List<FormProperty> formPropertyList){
+    public List<FormFieldData> convertTo(List<FormProperty> formPropertyList){
         List<FormFieldData> formFieldDataList = new ArrayList<>();
         for(FormProperty formProperty: formPropertyList){
             FormFieldData formFieldData = new FormFieldData();
@@ -27,11 +26,22 @@ public class FormUtils {
             formFieldData.setWritable(formProperty.isWritable());
             formFieldData.setType(formProperty.getType().getName());
             formFieldData.setValue(formProperty.getValue());
-            if("enum".equalsIgnoreCase(formFieldData.getType())){
-                formFieldData.setSelectValues(new ArrayList<>(((Map<String,String>)formProperty.getType().getInformation("values")).values()));
+            if(checkEnumTypes(formFieldData.getType())){
+                formFieldData.setSelectValues(((Map<String,String>)formProperty.getType().getInformation("values")));
             }
             formFieldDataList.add(formFieldData);
         }
         return formFieldDataList;
+    }
+
+    private boolean checkEnumTypes(String temp) {
+        List<String> values = new ArrayList<>();
+        values.add("enum");
+        values.add("users");
+        for (String s : values) {
+            if (s.equalsIgnoreCase(temp))
+                return true;
+        }
+        return false;
     }
 }

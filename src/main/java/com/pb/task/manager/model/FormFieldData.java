@@ -1,6 +1,7 @@
 package com.pb.task.manager.model;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by stas on 21.01.16.
@@ -13,7 +14,7 @@ public class FormFieldData {
     private boolean isReadable;
     private boolean isWritable;
     private String value;
-    private List<String> selectValues;
+    private Map<String, String> selectValues;
 
     public String getId() {
         return id;
@@ -72,11 +73,11 @@ public class FormFieldData {
         this.value = value;
     }
 
-    public List<String> getSelectValues() {
+    public Map<String, String> getSelectValues() {
         return selectValues;
     }
 
-    public void setSelectValues(List<String> selectValues) {
+    public void setSelectValues(Map<String, String>  selectValues) {
         this.selectValues = selectValues;
     }
 }

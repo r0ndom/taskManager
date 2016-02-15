@@ -10,7 +10,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class UserDao {
@@ -49,6 +51,15 @@ public class UserDao {
 
     public List<User> findAll() {
         return mapper.findAll();
+    }
+
+    public Map<String, String> findAllMap() {
+        Map<String, String> map = new HashMap<>();
+        List<User> list = mapper.findAll();
+        for (User user : list) {
+            map.put(user.getLdap(), user.toString());
+        }
+        return map;
     }
 
     public List<User> findByRole(Role role) {
