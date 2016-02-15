@@ -29,46 +29,29 @@
                                     </div>
                                 </div>
                             </c:when>
+                            <c:when test="${item.type == 'textarea'}">
+                                <div class="form-group row">
+                                    <div class="col-md-2">
+                                        <label>${item.name}</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <form:textarea path="map['${item.id}']" rows="5" cols="30" cssClass="form-control"
+                                                       value="${item.value}"/>
+                                    </div>
+                                </div>
+                            </c:when>
                             <c:otherwise>
-                                <c:choose>
-                                    <c:when test="${isWritable}">
-                                        <c:if test="${!item.writable}">
-                                            <div class="form-group row">
-                                                <div class="col-md-2">
-                                                    <label>${item.name}</label>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <form:input path="map['${item.id}']" class="form-control"
-                                                                value="${item.value}"
-                                                                disabled="true"/>
-                                                </div>
-                                            </div>
-                                        </c:if>
-                                        <c:if test="${item.writable}">
-                                            <div class="form-group row">
-                                                <div class="col-md-2">
-                                                    <label>${item.name}</label>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <form:input path="map['${item.id}']" class="form-control"
-                                                                value="${item.value}"/>
-                                                </div>
-                                            </div>
-                                        </c:if>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <div class="form-group row">
-                                            <div class="col-md-2">
-                                                <label>${item.name}</label>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <form:input path="map['${item.id}']" class="form-control"
-                                                            value="${item.value}"
-                                                            disabled="true"/>
-                                            </div>
+                                <c:if test="${item.writable}">
+                                    <div class="form-group row">
+                                        <div class="col-md-2">
+                                            <label>${item.name}</label>
                                         </div>
-                                    </c:otherwise>
-                                </c:choose>
+                                        <div class="col-md-4">
+                                            <form:input path="map['${item.id}']" class="form-control"
+                                                        value="${item.value}"/>
+                                        </div>
+                                    </div>
+                                </c:if>
                             </c:otherwise>
                         </c:choose>
                     </c:forEach>

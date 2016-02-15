@@ -5,7 +5,7 @@
     <userTask id="sid-938A71D1-F817-45F2-9785-519D0CC8D09A" name="create task" activiti:assignee="kermit" activiti:formKey="createTask">
       <extensionElements>
         <activiti:formProperty id="name" name="task name" type="string" variable="name" required="true"></activiti:formProperty>
-        <activiti:formProperty id="description" name="description" type="string" variable="description" required="true"></activiti:formProperty>
+        <activiti:formProperty id="description" name="description" type="textarea" variable="description" required="true"></activiti:formProperty>
         <activiti:formProperty id="priority" name="priority" type="enum" variable="priority" required="true">
           <activiti:value id="1" name="1"></activiti:value>
           <activiti:value id="2" name="2"></activiti:value>
@@ -21,7 +21,7 @@
     <userTask id="sid-A6978588-BF9A-4A52-9D08-ABB7E5594AA9" name="define expected time" activiti:assignee="kermit" activiti:formKey="expectedTime">
       <extensionElements>
         <activiti:formProperty id="name" name="Name" type="string" variable="name" writable="false"></activiti:formProperty>
-        <activiti:formProperty id="description" name="Description" type="string" variable="description" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="description" name="Description" type="textarea" variable="description" writable="false"></activiti:formProperty>
         <activiti:formProperty id="priority" name="priority" type="string" variable="priority" writable="false"></activiti:formProperty>
         <activiti:formProperty id="author" name="author" type="string" variable="author" writable="false"></activiti:formProperty>
         <activiti:formProperty id="expectedTime" name="Expected Time" type="long" variable="expectedTime" required="true"></activiti:formProperty>
@@ -35,7 +35,7 @@
     <userTask id="sid-753037C1-2114-4F78-8F96-AD3B290E169A" name="in progress" activiti:assignee="kermit" activiti:formKey="inProgress">
       <extensionElements>
         <activiti:formProperty id="name" name="Name" type="string" variable="name" writable="false"></activiti:formProperty>
-        <activiti:formProperty id="description" name="Description" type="string" variable="description" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="description" name="Description" type="textarea" variable="description" writable="false"></activiti:formProperty>
         <activiti:formProperty id="priority" name="priority" type="string" variable="priority" writable="false"></activiti:formProperty>
         <activiti:formProperty id="author" name="author" type="string" variable="author" writable="false"></activiti:formProperty>
         <activiti:formProperty id="expectedTime" name="Expected Time" type="long" variable="expectedTime" writable="false"></activiti:formProperty>
@@ -54,7 +54,7 @@
     <userTask id="sid-2C48E2E5-50AA-4BDD-AAC1-5F4060D33FB1" name="testing" activiti:assignee="kermit" activiti:formKey="onTesting">
       <extensionElements>
         <activiti:formProperty id="name" name="Name" type="string" variable="name" writable="false"></activiti:formProperty>
-        <activiti:formProperty id="description" name="Description" type="string" variable="description" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="description" name="Description" type="textarea" variable="description" writable="false"></activiti:formProperty>
         <activiti:formProperty id="priority" name="priority" type="string" variable="priority" writable="false"></activiti:formProperty>
         <activiti:formProperty id="author" name="author" type="string" variable="author" writable="false"></activiti:formProperty>
         <activiti:formProperty id="expectedTime" name="Expected Time" type="long" variable="expectedTime" writable="false"></activiti:formProperty>
@@ -69,7 +69,7 @@
     <userTask id="sid-7CE80B5C-46B9-4717-B88F-DB6DB17D3094" name="set task status" activiti:assignee="kermit" activiti:formKey="setTaskStatus">
       <extensionElements>
         <activiti:formProperty id="name" name="Name" type="string" variable="name" writable="false"></activiti:formProperty>
-        <activiti:formProperty id="description" name="Description" type="string" variable="description" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="description" name="Description" type="textarea" variable="description" writable="false"></activiti:formProperty>
         <activiti:formProperty id="priority" name="priority" type="string" variable="priority" writable="false"></activiti:formProperty>
         <activiti:formProperty id="author" name="author" type="string" variable="author" writable="false"></activiti:formProperty>
         <activiti:formProperty id="expectedTime" name="Expected Time" type="long" variable="expectedTime" writable="false"></activiti:formProperty>
@@ -91,7 +91,7 @@
     <userTask id="sid-7CE80B5C-46B9-4717-B88F-1234" name="task comleted" activiti:assignee="kermit">
       <extensionElements>
         <activiti:formProperty id="name" name="task name" type="string" variable="name" writable="false" required="true"></activiti:formProperty>
-        <activiti:formProperty id="description" name="task description" type="string" variable="description" writable="false" required="true"></activiti:formProperty>
+        <activiti:formProperty id="description" name="task description" type="textarea" variable="description" writable="false" required="true"></activiti:formProperty>
         <activiti:formProperty id="expectedTime" name="expected time" type="long" variable="expectedTime" writable="false" required="true"></activiti:formProperty>
         <activiti:formProperty id="startDate" name="start date" type="string" variable="startDate" writable="false"></activiti:formProperty>
         <activiti:formProperty id="endDate" name="end date" type="string" variable="endDate" writable="false"></activiti:formProperty>

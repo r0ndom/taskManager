@@ -39,6 +39,17 @@
                             </div>
                             <p></p>
                         </c:when>
+                        <c:when test="${item.type == 'textarea'}">
+                            <div class="form-group row">
+                                <div class="col-md-2">
+                                    <label>${item.name}</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <form:textarea path="map['${item.id}']" rows="5" cols="30" cssClass="form-control"
+                                                   value="${item.value}"/>
+                                </div>
+                            </div>
+                        </c:when>
                         <c:otherwise>
                             <c:choose>
                                 <c:when test="${isWritable}">

@@ -60,7 +60,6 @@ public class TaskController {
         mav.addObject("taskData", FormUtils.convertTo(formPropertyList));
         mav.addObject("userList", userDao.findAll());
         mav.addObject("taskId", taskId);
-        mav.addObject("isWritable", true);
         return mav;
     }
 
