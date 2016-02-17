@@ -16,6 +16,9 @@
                 <jsp:include page="search/searchFilter.jsp"/>
                 <input class="btn btn-success" style="margin-top: 25px" value="${createMessage}" onclick="window.location.href = '/app/tasks/create/';">
                 <input class="btn btn-success" style="margin-top: 25px" value="${archiveMessage}" onclick="window.location.href = '/app/tasks/archive/';">
+                <form action="/app/tasks/sort/" method="post">
+                    <input class="btn btn-success" style="margin-top: 25px" value="Сортировать" type="submit"/>
+                </form>
                 <jsp:include page="search/searchTable.jsp"/>
             </div>
         </div>

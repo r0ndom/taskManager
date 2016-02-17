@@ -90,6 +90,14 @@ public class ActivitiService {
         return generateTaskDataList(query);
     }
 
+    public List<TaskData> findAll(Order order) {
+        List<Task> query = taskService.createTaskQuery().list();
+        deleteUnusedTask(query);
+        List<TaskData> result = generateTaskDataList(query);
+        Collections.sort(result, order.getTaskDataComparator());
+        return result;
+    }
+
     private void deleteUnusedTask(List<Task> tasks) {
         Iterator<Task> iterator = tasks.iterator();
         while (iterator.hasNext()){

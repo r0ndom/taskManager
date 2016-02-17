@@ -118,13 +118,19 @@
                 <span>
                     <c:if test="${isSubmit}">
                         <input class="btn btn-success" style="display: inline;" value="${nextMessage}" type="submit"/>
-                        <div id="addCommentDiv" class="col-md-2">
+                        <p></p>
+                        <hr>
+                        <div id="addCommentDiv" class="form-group row">
                             <input id="taskId" name="taskId" value="${execId}" hidden/>
-                            <label>Comment text:</label>
-                            <input id="text" name="text" class="form-control"/>
-                            <input class="btn btn-success" onclick="addComment()" value="Add comment"/>
+                            <div class="col-md-2"><label>Comment text:</label></div>
+                            <div class="col-md-2">
+                                <input id="text" name="text" class="form-control"/>
+                            </div>
+                            <div class="col-md-2">
+                                <input class="btn btn-success" onclick="addComment()" value="Add comment"/>
+                            </div>
                         </div>
-                        <table>
+                        <table class="table">
                             <c:forEach items="${comments}" var="com">
                                 <tr>
                                     <td>User:${com.ldap}</td>
@@ -135,22 +141,22 @@
                         </table>
                     </c:if>
                     <c:if test="${isEditor}">
-                        <input class="btn btn-success" style="display: inline;" onclick="window.location.href ='/app/tasks/${taskId}/'"
+                        <input class="btn btn-success" onclick="window.location.href ='/app/tasks/${taskId}/'"
                                value="${editMessage}"/>
                     </c:if>
                     <c:if test="${editDescr}">
-                        <input class="btn btn-success" style="display: inline;" onclick="window.location.href ='/app/tasks/editTask/${taskId}/'"
+                        <input class="btn btn-success" onclick="window.location.href ='/app/tasks/editTask/${taskId}/'"
                                value="${editDesc}"/>
                     </c:if>
                 </span>
             </form:form>
             <c:if test="${isDeleted}">
-                <form action="/app/tasks/delete/${taskId}" method="POST" style="display: inline;margin:0px;padding:0px;">
+                <form action="/app/tasks/delete/${taskId}" method="POST" style="margin:0px;padding:0px;">
                     <input type="submit" class="btn btn-danger" value="${deleteMessage}"/>
                 </form>
             </c:if>
 
-            <input class="btn btn-default" onclick="window.location.href ='/app/tasks/'" value="${backMessage}" style="display: inline"/>
+            <input class="btn btn-default" onclick="window.location.href ='/app/tasks/'" value="${backMessage}"/>
             <%--<input class="btn btn-default" onclick="" value="${backMessage}" style="display: inline"/>--%>
         </div>
         <jsp:include page="../commons/footer.jsp"/>

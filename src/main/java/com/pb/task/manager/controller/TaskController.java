@@ -1,21 +1,16 @@
 package com.pb.task.manager.controller;
 
 import com.pb.task.manager.dao.UserDao;
-import com.pb.task.manager.model.Comment;
-import com.pb.task.manager.model.FormData;
-import com.pb.task.manager.model.Role;
-import com.pb.task.manager.model.TaskData;
+import com.pb.task.manager.model.*;
 import com.pb.task.manager.model.filter.TaskSearchFilter;
 import com.pb.task.manager.service.ActivitiService;
 
 import com.pb.task.manager.util.FormUtils;
 import org.activiti.engine.form.FormProperty;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.*;
@@ -42,6 +37,12 @@ public class TaskController {
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public ModelAndView search(TaskSearchFilter filter) {
         return getMav(service.search(filter));
+    }
+
+
+    @RequestMapping(value = "/sort", method = RequestMethod.POST)
+    public ModelAndView sort() {
+        return getMav(service.findAll(Order.DESC));
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
@@ -183,9 +184,10 @@ public class TaskController {
     }
 
     @RequestMapping(value = "/addComment", method = RequestMethod.POST)
-    public String addComment(Comment comment) {
+    @ResponseStatus(HttpStatus.OK)
+    public void addComment(Comment comment) {
         service.createComment(comment.getTaskId(), comment.getText());
-        return "redirect:/app/tasks/" + comment.getTaskId();
+        //return "redirect:/app/tasks/" + comment.getTaskId();
     }
 
     @ModelAttribute("formData")
