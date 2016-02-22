@@ -9,6 +9,7 @@ import com.pb.task.manager.util.PropertyReader;
 import org.activiti.engine.*;
 import org.activiti.engine.form.FormProperty;
 import org.activiti.engine.form.TaskFormData;
+import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
@@ -20,6 +21,8 @@ import java.util.*;
 /**
  * Created by Mednikov on 05.01.2016.
  */
+
+//TODO refactor this shit
 @Service
 public class ActivitiService {
 
@@ -94,7 +97,8 @@ public class ActivitiService {
         List<Task> query = taskService.createTaskQuery().list();
         deleteUnusedTask(query);
         List<TaskData> result = generateTaskDataList(query);
-        Collections.sort(result, order.getTaskDataComparator());
+        if (!order.equals(Order.NATURAL))
+            Collections.sort(result, order.getTaskDataComparator());
         return result;
     }
 
@@ -178,12 +182,22 @@ public class ActivitiService {
         return params;
     }
 
+
     public String startProcess() {
         ProcessInstance instance = runtimeService.startProcessInstanceByKey("process");
         String processId = instance.getProcessInstanceId();
         TaskQuery query = taskService.createTaskQuery().processInstanceId(processId);
         Task task = query.singleResult();
         return task.getId();
+    }
+
+    public void redeploy() {
+        List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
+        for (Deployment deployment : deployments)
+            repositoryService.deleteDeployment(deployment.getId());
+        repositoryService.createDeployment()
+                .addClasspathResource("/process/process.bpmn20.xml")
+                .deploy();
     }
 
     private List<TaskData> generateTaskDataList(List<Task> tasks) {
@@ -249,5 +263,15 @@ public class ActivitiService {
 
     public List<Archive> getArchivedTasks() {
         return archiveMapper.findAll();
+    }
+
+    public void putValueToForm(FormProperty formProperty, FormData data, String attr, String value) {
+        if(Objects.equals(formProperty.getId(), attr) && formProperty.isRequired()) {
+            data.getMap().put(attr, value);
+        }
+    }
+
+    public void putDateToForm(FormProperty formProperty, FormData data, String attr) {
+        putValueToForm(formProperty, data, attr, new Date().toString());
     }
 }

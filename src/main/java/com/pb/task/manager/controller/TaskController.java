@@ -50,13 +50,6 @@ public class TaskController {
         ModelAndView mav = new ModelAndView("process/create");
         String taskId = service.startProcess();
         List<FormProperty> formPropertyList = service.getFormProperty(taskId);
-        Iterator<FormProperty> iterator = formPropertyList.iterator();
-        while (iterator.hasNext()){
-            FormProperty formProperty = iterator.next();
-            if(Objects.equals(formProperty.getId(), "author") && formProperty.isRequired()) {
-                iterator.remove();
-            }
-        }
         mav.addObject("taskData", formUtils.convertTo(formPropertyList));
         mav.addObject("taskId", taskId);
         return mav;
@@ -65,18 +58,6 @@ public class TaskController {
     @RequestMapping(value = "/submitTaskForm", method = RequestMethod.POST)
     public String submit(FormData data) {
         System.out.println("Form data id: " + data.getId());
-        List<FormProperty> formPropertyList = service.getFormProperty(data.getId());
-        for(FormProperty formProperty: formPropertyList){
-            if(Objects.equals(formProperty.getId(), "author") && formProperty.isRequired()) {
-                data.getMap().put("author", userDao.getCurrentUser().getLdap());
-            }
-            if(Objects.equals(formProperty.getId(), "startDate") && formProperty.isRequired()) {
-                data.getMap().put("startDate", new Date().toString());
-            }
-            if(Objects.equals(formProperty.getId(), "endDate") && formProperty.isRequired()) {
-                data.getMap().put("endDate", new Date().toString());
-            }
-        }
         if (service.getFormKey(data.getId()).equals("expectedTime")&&!data.getMap().containsKey("edit")) {
             data.getMap().put("edit", "false");
         }
@@ -105,13 +86,6 @@ public class TaskController {
         String executionId = service.submitForm(formData);
         String nextTaskId = service.getTaskIdByExecutionId(executionId);
         List<FormProperty> nextFormPropertyList = service.getFormProperty(nextTaskId);
-        Iterator<FormProperty> iterator = nextFormPropertyList.iterator();
-        while (iterator.hasNext()){
-            FormProperty formProperty = iterator.next();
-            if(Objects.equals(formProperty.getId(), "author") && formProperty.isRequired()) {
-                iterator.remove();
-            }
-        }
         mav.addObject("taskData", formUtils.convertTo(nextFormPropertyList));
         mav.addObject("isWritable", true);
         mav.addObject("taskId", nextTaskId);
@@ -127,15 +101,6 @@ public class TaskController {
         Iterator<FormProperty> iterator = formPropertyList.iterator();
         while (iterator.hasNext()) {
             FormProperty formProperty = iterator.next();
-            if(Objects.equals(formProperty.getId(), "author") && formProperty.isRequired()) {
-                iterator.remove();
-            }
-            if(Objects.equals(formProperty.getId(), "startDate") && formProperty.isRequired()) {
-                iterator.remove();
-            }
-            if(Objects.equals(formProperty.getId(), "endDate") && formProperty.isRequired()) {
-                iterator.remove();
-            }
             if(Objects.equals(formProperty.getId(), "edit")) {
                 iterator.remove();
             }
@@ -187,7 +152,6 @@ public class TaskController {
     @ResponseStatus(HttpStatus.OK)
     public void addComment(Comment comment) {
         service.createComment(comment.getTaskId(), comment.getText());
-        //return "redirect:/app/tasks/" + comment.getTaskId();
     }
 
     @ModelAttribute("formData")

@@ -12,18 +12,10 @@ import java.util.Map;
 
 public class UsersFormType extends AbstractFormType {
 
-    @Autowired
-    private UserDao userDao;
-
     private static final long serialVersionUID = 1L;
     public static final String NAME = "users";
 
     protected Map<String, String> values;
-
-    @PostConstruct
-    public void setValues() {
-        this.values = userDao.findAllMap();
-    }
 
     public String getName() {
         return NAME;

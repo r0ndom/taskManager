@@ -44,10 +44,6 @@ public class TaskData {
         return params.get("author");
     }
 
-    public State getState() {
-        return State.getState(params.get("state"));
-    }
-
     public Long getExpectedTime() {
         String expectedTimeStr = params.get("expectedTime");
         return (expectedTimeStr != null && !expectedTimeStr.equals(""))
@@ -56,11 +52,6 @@ public class TaskData {
 
     public String getDescription() {
         return params.get("description");
-    }
-
-    public Status getStatus() {
-        Status status = Status.getStatus(params.get("status"));
-        return status == null? Status.NEW : status;
     }
 
     public String getActivitiDynamicId() {

@@ -16,9 +16,9 @@ public enum Order {
             public int compare(TaskData task1, TaskData task2) {
                 Integer priority1 = Integer.valueOf(getPriority(task1));
                 Integer priority2 = Integer.valueOf(getPriority(task2));
-                if (priority1 > priority2)
-                    return 1;
                 if (priority1 < priority2)
+                    return 1;
+                if (priority1 > priority2)
                     return -1;
                 return 0;
             }
@@ -33,4 +33,6 @@ public enum Order {
     private String getPriority(TaskData taskData) {
         return getStrFromTask(taskData, "priority");
     }
+
+
 }

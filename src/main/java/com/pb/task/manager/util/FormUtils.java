@@ -1,7 +1,10 @@
 package com.pb.task.manager.util;
 
+import com.pb.task.manager.form.enums.Enumerable;
+import com.pb.task.manager.form.enums.EnumerableFactory;
 import com.pb.task.manager.model.FormFieldData;
 import org.activiti.engine.form.FormProperty;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -15,9 +18,13 @@ import java.util.Map;
 @Component
 public class FormUtils {
 
+    @Autowired
+    private EnumerableFactory factory;
+
     public List<FormFieldData> convertTo(List<FormProperty> formPropertyList){
         List<FormFieldData> formFieldDataList = new ArrayList<>();
         for(FormProperty formProperty: formPropertyList){
+            Enumerable enumerable = factory.buildEnum(formProperty);
             FormFieldData formFieldData = new FormFieldData();
             formFieldData.setId(formProperty.getId());
             formFieldData.setName(formProperty.getName());
@@ -26,22 +33,10 @@ public class FormUtils {
             formFieldData.setWritable(formProperty.isWritable());
             formFieldData.setType(formProperty.getType().getName());
             formFieldData.setValue(formProperty.getValue());
-            if(checkEnumTypes(formFieldData.getType())){
-                formFieldData.setSelectValues(((Map<String,String>)formProperty.getType().getInformation("values")));
-            }
+            formFieldData.setSelectValues(enumerable.getValues());
             formFieldDataList.add(formFieldData);
         }
         return formFieldDataList;
     }
 
-    private boolean checkEnumTypes(String temp) {
-        List<String> values = new ArrayList<>();
-        values.add("enum");
-        values.add("users");
-        for (String s : values) {
-            if (s.equalsIgnoreCase(temp))
-                return true;
-        }
-        return false;
-    }
 }
