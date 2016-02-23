@@ -155,6 +155,12 @@ public class TaskController {
         service.createComment(comment.getTaskId(), comment.getText());
     }
 
+    @RequestMapping(value = "/deploy", method = RequestMethod.GET)
+    public String deploy() {
+        service.deploy();
+        return "redirect:/app/tasks/";
+    }
+
     @ModelAttribute("formData")
     public FormData getFormData() {
         return new FormData();

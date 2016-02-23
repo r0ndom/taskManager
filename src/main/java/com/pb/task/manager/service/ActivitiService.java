@@ -286,4 +286,10 @@ public class ActivitiService {
         if (developer != null)
             runtimeService.setVariable(execId, "executor", developer);
     }
+
+    public void deploy() {
+        repositoryService.createDeployment()
+                .addClasspathResource("process/process.bpmn20.xml")
+                .deploy();
+    }
 }
