@@ -159,6 +159,11 @@
             <version>${spring.security.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-cdi</artifactId>
+            <version>5.19.0.2</version>
+        </dependency>
 
         <!--test-->
         <dependency>

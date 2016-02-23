@@ -18,14 +18,14 @@
         </activiti:formProperty>
       </extensionElements>
     </userTask>
-    <userTask id="sid-A6978588-BF9A-4A52-9D08-ABB7E5594AA9" name="define expected time" activiti:assignee="kermit" activiti:formKey="expectedTime">
+    <userTask id="sid-A6978588-BF9A-4A52-9D08-ABB7E5594AA9" name="define expected time" activiti:assignee="kermit" activiti:formKey="expectedTime" activiti:expression="${additionalInfo.defineExecutor(execution.id)}">
       <extensionElements>
         <activiti:formProperty id="name" name="Name" type="string" variable="name" writable="false"></activiti:formProperty>
         <activiti:formProperty id="description" name="Description" type="textarea" variable="description" writable="false"></activiti:formProperty>
         <activiti:formProperty id="priority" name="priority" type="string" variable="priority" writable="false"></activiti:formProperty>
         <activiti:formProperty id="author" name="author" type="string" variable="author" writable="false"></activiti:formProperty>
         <activiti:formProperty id="expectedTime" name="Expected Time" type="long" variable="expectedTime" required="true"></activiti:formProperty>
-        <activiti:formProperty id="executor" name="Executor" type="string" variable="executor"></activiti:formProperty>
+        <activiti:formProperty id="executor" name="Executor" type="string" variable="executor" writable="false"></activiti:formProperty>
         <activiti:formProperty id="status" name="status" type="enum" variable="status">
           <activiti:value id="оценённая" name="оценённая"></activiti:value>
         </activiti:formProperty>
@@ -40,7 +40,7 @@
         <activiti:formProperty id="author" name="author" type="string" variable="author" writable="false"></activiti:formProperty>
         <activiti:formProperty id="expectedTime" name="Expected Time" type="long" variable="expectedTime" writable="false"></activiti:formProperty>
         <activiti:formProperty id="executor" name="Executor" type="string" variable="executor" writable="false"></activiti:formProperty>
-        <activiti:formProperty id="startDate" name="start date" type="string" variable="startDate" required="true" readable="false" default="${additionalInfo.getStartDate()}"></activiti:formProperty>
+        <activiti:formProperty id="startDate" name="start date" type="string" variable="startDate" required="true" readable="false" default="${additionalInfo.getStartDate(execution.id)}"></activiti:formProperty>
         <activiti:formProperty id="status" name="status" type="enum" variable="status" required="true">
           <activiti:value id="в работе" name="в работе"></activiti:value>
         </activiti:formProperty>
@@ -60,6 +60,7 @@
         <activiti:formProperty id="expectedTime" name="Expected Time" type="long" variable="expectedTime" writable="false"></activiti:formProperty>
         <activiti:formProperty id="startDate" name="start date" type="string" variable="startDate" writable="false"></activiti:formProperty>
         <activiti:formProperty id="endDate" name="end date" type="string" variable="endDate" required="true" readable="false" default="${additionalInfo.getEndDate()}"></activiti:formProperty>
+        <activiti:formProperty id="developer" name="developer" type="string" variable="developer" required="true" readable="false" default="${executor}"></activiti:formProperty>
         <activiti:formProperty id="executor" name="Executor" type="users" variable="executor" writable="true"></activiti:formProperty>
         <activiti:formProperty id="status" name="status" type="enum" variable="status" required="true">
           <activiti:value id="на тестировании" name="на тестировании"></activiti:value>
@@ -73,8 +74,9 @@
         <activiti:formProperty id="priority" name="priority" type="string" variable="priority" writable="false"></activiti:formProperty>
         <activiti:formProperty id="author" name="author" type="string" variable="author" writable="false"></activiti:formProperty>
         <activiti:formProperty id="expectedTime" name="Expected Time" type="long" variable="expectedTime" writable="false"></activiti:formProperty>
-        <activiti:formProperty id="elapsedTime" name="Elapsed time" type="string" variable="elapsedTime" required="true"></activiti:formProperty>
+        <activiti:formProperty id="elapsedTime" name="Elapsed time" type="string" variable="elapsedTime" required="true" writable="false" default="${additionalInfo.getElapsedTime(startDate, endDate)}"></activiti:formProperty>
         <activiti:formProperty id="executor" name="Executor" type="string" variable="executor" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="developer" name="developer" type="string" variable="developer" writable="false"></activiti:formProperty>
         <activiti:formProperty id="startDate" name="start date" type="string" variable="startDate" writable="false"></activiti:formProperty>
         <activiti:formProperty id="endDate" name="end date" type="string" variable="endDate" writable="false"></activiti:formProperty>
         <activiti:formProperty id="status" name="status" type="enum" variable="status" required="true">

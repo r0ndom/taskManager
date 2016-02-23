@@ -39,10 +39,9 @@ public class TaskController {
         return getMav(service.search(filter));
     }
 
-
     @RequestMapping(value = "/sort", method = RequestMethod.POST)
-    public ModelAndView sort() {
-        return getMav(service.findAll(Order.DESC));
+    public ModelAndView sort(String str) {
+        return getMav(service.findAll((str != null && !str.isEmpty()) ? Order.NATURAL : Order.DESC));
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
@@ -61,6 +60,8 @@ public class TaskController {
         if (service.getFormKey(data.getId()).equals("expectedTime")&&!data.getMap().containsKey("edit")) {
             data.getMap().put("edit", "false");
         }
+        //TODO fix this fucking piece of shit
+        service.defineExec(service.getTaskExecutionIdById(data.getId()));
         String executionId = service.submitForm(data);
         String taskId = service.getTaskIdByExecutionId(executionId);
         if (data.getMap().containsKey("status")) {

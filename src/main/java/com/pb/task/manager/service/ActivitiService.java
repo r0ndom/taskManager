@@ -274,4 +274,16 @@ public class ActivitiService {
     public void putDateToForm(FormProperty formProperty, FormData data, String attr) {
         putValueToForm(formProperty, data, attr, new Date().toString());
     }
+
+    public void defineExec(String execId) {
+        String id = getTaskIdByExecutionId(execId);
+        Map<String, Object> map = getParamsByTaskId(id);
+        String developer = null;
+        for (String key : map.keySet()) {
+            if (key.equals("developer"))
+                developer = (String) map.get(key);
+        }
+        if (developer != null)
+            runtimeService.setVariable(execId, "executor", developer);
+    }
 }
