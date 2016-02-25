@@ -43,10 +43,6 @@ public class ActivitiService {
     @Autowired
     private CommentMapper commentMapper;
 
-    public Map<String, Object> getVariables(String taskId){
-         return taskService.getVariables(taskId);
-    }
-
     public String getFormKey(String taskId){
         return taskService.createTaskQuery().taskId(taskId).singleResult().getFormKey();
     }
@@ -89,6 +85,7 @@ public class ActivitiService {
 
     public List<TaskData> findAll() {
         List<Task> query = taskService.createTaskQuery().list();
+        System.out.println(query.get(0).getId());
         deleteUnusedTask(query);
         return generateTaskDataList(query);
     }
@@ -265,15 +262,6 @@ public class ActivitiService {
         return archiveMapper.findAll();
     }
 
-    public void putValueToForm(FormProperty formProperty, FormData data, String attr, String value) {
-        if(Objects.equals(formProperty.getId(), attr) && formProperty.isRequired()) {
-            data.getMap().put(attr, value);
-        }
-    }
-
-    public void putDateToForm(FormProperty formProperty, FormData data, String attr) {
-        putValueToForm(formProperty, data, attr, new Date().toString());
-    }
 
     public void defineExec(String execId) {
         String id = getTaskIdByExecutionId(execId);
