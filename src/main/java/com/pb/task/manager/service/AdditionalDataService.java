@@ -1,7 +1,6 @@
 package com.pb.task.manager.service;
 
 import com.pb.task.manager.dao.UserDao;
-import org.activiti.cdi.annotation.BusinessProcessScoped;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.form.FormProperty;
 import org.springframework.beans.factory.annotation.Autowired;
