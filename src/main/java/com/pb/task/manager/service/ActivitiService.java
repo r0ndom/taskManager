@@ -50,7 +50,6 @@ public class ActivitiService {
     public String submitForm(FormData formData) {
         String id = formData.getId();
         Task task = taskService.createTaskQuery().taskId(id).singleResult();
-        System.out.println("task.getName(): " + task.getName());
         removeLongStringSymbols(formData.getMap());
         formService.submitTaskFormData(id, formData.getMap());
         return task.getExecutionId();
@@ -77,9 +76,6 @@ public class ActivitiService {
     }
 
     public List<FormProperty> getFormProperty(String taskId) {
-        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-        System.out.println("task.getName(): " + task.getName());
-        System.out.println("getFormProperty by id: " + taskId);
         return formService.getTaskFormData(taskId).getFormProperties();
     }
 
