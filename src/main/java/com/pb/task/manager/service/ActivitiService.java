@@ -3,6 +3,7 @@ package com.pb.task.manager.service;
 import com.pb.task.manager.dao.UserDao;
 import com.pb.task.manager.mapper.ArchiveMapper;
 import com.pb.task.manager.mapper.CommentMapper;
+import com.pb.task.manager.mapper.FilterMapper;
 import com.pb.task.manager.model.*;
 import com.pb.task.manager.model.filter.TaskSearchFilter;
 import com.pb.task.manager.util.PropertyReader;
@@ -42,6 +43,8 @@ public class ActivitiService {
     private ArchiveMapper archiveMapper;
     @Autowired
     private CommentMapper commentMapper;
+    @Autowired
+    private FilterMapper mapper;
 
     public String getFormKey(String taskId){
         return taskService.createTaskQuery().taskId(taskId).singleResult().getFormKey();

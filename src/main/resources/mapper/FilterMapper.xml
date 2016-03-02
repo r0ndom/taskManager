@@ -4,13 +4,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pb.task.manager.mapper.FilterMapper" >
 
-    <resultMap id="taskResultMap" type="com.pb.task.manager.model.TaskData">
+    <resultMap id="taskResultMap" type="com.pb.task.manager.model.TaskDto">
         <id property="activitiDynamicId" column="task.id_"/>
         <result property="id" column="task.execution_id_"/>
-        <collection property="params">
-            <result property="key" column="var.name_"/>
-            <result property="value" column="var.text_"/>
-        </collection>
+        <result property="key" column="var.name_"/>
+        <result property="value" column="var.text_"/>
+        <!--<collection property="params">-->
+            <!--<result property="key" column="var.name_"/>-->
+            <!--<result property="value" column="var.text_"/>-->
+        <!--</collection>-->
     </resultMap>
 
     <select id="search" resultMap="taskResultMap" parameterType="com.pb.task.manager.model.filter.TaskSearchFilter">
