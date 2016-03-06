@@ -1,4 +1,5 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
 
 <spring:message code="messages.exit" var="messageExit"/>
 
@@ -15,6 +16,7 @@
           <img src="${pageContext.request.contextPath}/resources/img/exit.png"/>
         </button>
       </form>
+        <input class="btn btn-success" value="Профиль" onclick="window.location.href = '/app/users/profile/'">
     </div>
   </div>
 </nav>

@@ -40,6 +40,30 @@ public class UserController {
         return "redirect:/app/users/";
     }
 
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    public ModelAndView showProfile() {
+        ModelAndView mav = new ModelAndView("users/profile");
+        mav.addObject("user", userDao.getCurrentUser());
+        return mav;
+    }
+
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    public String edit(User user) {
+        User current = userDao.getCurrentUser();
+        user.setId(current.getId());
+        user.setLdap(current.getLdap());
+        user.setRole(current.getRole());
+        userDao.update(user);
+        return "redirect:/app/users/profile/";
+    }
+
+    @RequestMapping(value = "/edit", method = RequestMethod.GET)
+    public ModelAndView editPage() {
+        ModelAndView mav = new ModelAndView("users/edit");
+        mav.addObject("currentUser", userDao.getCurrentUser());
+        return mav;
+    }
+
     @ModelAttribute("user")
     public User getUser() {
         return new User();

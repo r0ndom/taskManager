@@ -38,6 +38,8 @@ public class UserDao {
     }
 
     public void update(User user) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
         mapper.update(user);
     }
 

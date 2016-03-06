@@ -74,13 +74,17 @@ public class TaskController {
     }
 
     @RequestMapping(value = "/editTask/{id}", method = RequestMethod.GET)
-    public ModelAndView edit(@PathVariable("id") String taskId) {
+    public ModelAndView edit(@PathVariable("id") String execId) {
         ModelAndView mav = new ModelAndView("process/details");
+        String taskId = service.getTaskIdByExecutionId(execId);
         FormData formData = new FormData(taskId);
         List<FormProperty> currentFormPropertyList = service.getFormProperty(taskId);
         for(FormProperty formProperty: currentFormPropertyList) {
             if(formProperty.isRequired()){
                 formData.put(formProperty.getId(), "");
+            }
+            if(formProperty.getType().getName().equals("enum")){
+                formData.put(formProperty.getId(), "оценённая");
             }
         }
         formData.put("edit", "true");
@@ -119,6 +123,7 @@ public class TaskController {
     @RequestMapping(value = "/show/{id}", method = RequestMethod.GET)
     public ModelAndView showTaskData(@PathVariable("id") String taskId) {
         ModelAndView mav = new ModelAndView("process/details");
+        String execId = service.getTaskExecutionIdById(taskId);
         List<FormProperty> formPropertyList = service.getFormProperty(taskId);
         Iterator<FormProperty> iterator = formPropertyList.iterator();
         while (iterator.hasNext()){
@@ -131,6 +136,7 @@ public class TaskController {
         mav.addObject("taskData", formPropertyList);
         mav.addObject("isWritable", false);
         mav.addObject("taskId", taskId);
+        mav.addObject("execId", execId);
         mav.addObject("isEditor", service.checkUserAccess(taskId));
         mav.addObject("isDeleted", service.checkDeleteAccess(taskId));
         return mav;

@@ -84,7 +84,6 @@ public class ActivitiService {
 
     public List<TaskData> findAll() {
         List<Task> query = taskService.createTaskQuery().list();
-        System.out.println(query.get(0).getId());
         deleteUnusedTask(query);
         return generateTaskDataList(query);
     }

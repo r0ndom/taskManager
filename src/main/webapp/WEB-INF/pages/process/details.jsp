@@ -19,7 +19,11 @@
 
 <tag:layout>
     <script>
+        $('#detailsForm').on('submit', function(e){
+            e.preventDefault();
+        });
         function addComment() {
+            event.preventDefault();
             var taskId= $("#taskId").val();
             var text = $("#text").val();
             $.ajax({
@@ -35,7 +39,7 @@
     <div id="mainPage">
         <jsp:include page="../commons/header.jsp"/>
         <div class="container">
-            <form:form method="POST" commandName="formData" action="/app/tasks/submitTaskForm" cssStyle="display: inline;">
+            <form:form method="POST" id="detailsForm" commandName="formData" action="/app/tasks/submitTaskForm" cssStyle="display: inline;">
                 <c:forEach items="${taskData}" var="item">
                     <c:choose>
                         <c:when test="${(item.type == 'enum') || item.type == 'users'}">
@@ -120,32 +124,13 @@
                         <input class="btn btn-success" style="display: inline;" value="${nextMessage}" type="submit"/>
                         <p></p>
                         <hr>
-                        <div id="addCommentDiv" class="form-group row">
-                            <input id="taskId" name="taskId" value="${execId}" hidden/>
-                            <div class="col-md-2"><label>Comment text:</label></div>
-                            <div class="col-md-2">
-                                <input id="text" name="text" class="form-control"/>
-                            </div>
-                            <div class="col-md-2">
-                                <input class="btn btn-success" onclick="addComment()" value="Add comment"/>
-                            </div>
-                        </div>
-                        <table class="table">
-                            <c:forEach items="${comments}" var="com">
-                                <tr>
-                                    <td>User:${com.ldap}</td>
-                                    <td>Text:${com.text}</td>
-                                    <td>Date:${com.date}</td>
-                                </tr>
-                            </c:forEach>
-                        </table>
                     </c:if>
                     <c:if test="${isEditor}">
                         <input class="btn btn-success" onclick="window.location.href ='/app/tasks/${taskId}/'"
                                value="${editMessage}"/>
                     </c:if>
                     <c:if test="${editDescr}">
-                        <input class="btn btn-success" onclick="window.location.href ='/app/tasks/editTask/${taskId}/'"
+                        <input class="btn btn-success" onclick="window.location.href ='/app/tasks/editTask/${execId}/'"
                                value="${editDesc}"/>
                     </c:if>
                 </span>
@@ -155,7 +140,27 @@
                     <input type="submit" class="btn btn-danger" value="${deleteMessage}"/>
                 </form>
             </c:if>
-
+            <c:if test="${isSubmit}">
+                <div id="addCommentDiv" class="form-group row">
+                    <input id="taskId" name="taskId" value="${execId}" hidden/>
+                    <div class="col-md-2"><label>Comment text:</label></div>
+                    <div class="col-md-2">
+                        <input id="text" name="text" class="form-control"/>
+                    </div>
+                    <div class="col-md-2">
+                        <input class="btn btn-success" onclick="addComment()" value="Add comment"/>
+                    </div>
+                </div>
+                <table class="table">
+                    <c:forEach items="${comments}" var="com">
+                        <tr>
+                            <td>User:${com.ldap}</td>
+                            <td>Text:${com.text}</td>
+                            <td>Date:${com.date}</td>
+                        </tr>
+                    </c:forEach>
+                </table>
+            </c:if>
             <input class="btn btn-default" onclick="window.location.href ='/app/tasks/'" value="${backMessage}"/>
             <%--<input class="btn btn-default" onclick="" value="${backMessage}" style="display: inline"/>--%>
         </div>
