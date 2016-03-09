@@ -93,8 +93,10 @@ public class TaskController {
         List<FormProperty> nextFormPropertyList = service.getFormProperty(nextTaskId);
         mav.addObject("taskData", formUtils.convertTo(nextFormPropertyList));
         mav.addObject("isWritable", true);
+        mav.addObject("execId", execId);
         mav.addObject("taskId", nextTaskId);
         mav.addObject("isSubmit", true);
+        mav.addObject("hasComment", false);
         return mav;
     }
 
@@ -117,6 +119,7 @@ public class TaskController {
         mav.addObject("taskId", taskId);
         mav.addObject("execId", id);
         mav.addObject("isSubmit", true);
+        mav.addObject("hasComment", true);
         return mav;
     }
 
@@ -156,9 +159,10 @@ public class TaskController {
     }
 
     @RequestMapping(value = "/addComment", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.OK)
-    public void addComment(Comment comment) {
+    public String addComment(Comment comment) {
+        String taskId = service.getTaskIdByExecutionId(comment.getTaskId());
         service.createComment(comment.getTaskId(), comment.getText());
+        return "redirect:/app/tasks/" + taskId;
     }
 
     @RequestMapping(value = "/deploy", method = RequestMethod.GET)

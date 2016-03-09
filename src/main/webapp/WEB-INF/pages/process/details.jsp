@@ -19,22 +19,22 @@
 
 <tag:layout>
     <script>
-        $('#detailsForm').on('submit', function(e){
-            e.preventDefault();
-        });
-        function addComment() {
-            event.preventDefault();
-            var taskId= $("#taskId").val();
-            var text = $("#text").val();
-            $.ajax({
-                url: "/app/tasks/addComment",
-                method: "POST",
-                data: {"taskId": taskId, "text": text},
-                success: function () {
-                    location.reload();
-                }
-            });
-        }
+//        $('#detailsForm').on('submit', function(e){
+//            e.preventDefault();
+//        });
+//        function addComment() {
+//            event.preventDefault();
+//            var taskId= $("#taskId").val();
+//            var text = $("#text").val();
+//            $.ajax({
+//                url: "/app/tasks/addComment",
+//                method: "POST",
+//                data: {"taskId": taskId, "text": text},
+//                success: function () {
+//                    location.reload();
+//                }
+//            });
+//        }
     </script>
     <div id="mainPage">
         <jsp:include page="../commons/header.jsp"/>
@@ -140,17 +140,19 @@
                     <input type="submit" class="btn btn-danger" value="${deleteMessage}"/>
                 </form>
             </c:if>
-            <c:if test="${isSubmit}">
+            <c:if test="${hasComment}">
+                <form:form method="POST" commandName="comment" action="/app/tasks/addComment">
                 <div id="addCommentDiv" class="form-group row">
-                    <input id="taskId" name="taskId" value="${execId}" hidden/>
+                    <input type="hidden" name="taskId" hidden="hidden" value="${execId}"/>
                     <div class="col-md-2"><label>Comment text:</label></div>
                     <div class="col-md-2">
-                        <input id="text" name="text" class="form-control"/>
+                        <form:input path="text" cssClass="form-control"/>
                     </div>
                     <div class="col-md-2">
-                        <input class="btn btn-success" onclick="addComment()" value="Add comment"/>
+                        <input class="btn btn-success" type="submit" value="Add comment"/>
                     </div>
                 </div>
+                </form:form>
                 <table class="table">
                     <c:forEach items="${comments}" var="com">
                         <tr>
