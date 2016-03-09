@@ -23,6 +23,9 @@
                     <input name="str" value="natural" hidden/>
                     <input class="btn btn-primary" style="margin-top: 25px" value="Обычный порядок" type="submit"/>
                 </form>
+                <form action="/app/export" method="post" style="display: inline;">
+                    <input class="btn btn-primary" style="margin-top: 25px" value="Export" type="submit"/>
+                </form>
                 <jsp:include page="search/searchTable.jsp"/>
             </div>
         </div>

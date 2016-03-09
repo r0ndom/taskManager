@@ -33,4 +33,9 @@ public class LoginController {
         return model;
     }
 
+    @RequestMapping(value = "/auth", method = RequestMethod.GET)
+    public String googleAuth() {
+        return "login/authGoogle";
+    }
+
 }
