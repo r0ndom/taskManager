@@ -9,28 +9,32 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.googleapis.media.MediaHttpUploader;
+import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.InputStreamContent;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
+import com.google.api.services.drive.model.File;
+import com.google.api.services.drive.model.FileList;
 import com.pb.task.manager.dao.UserDao;
 import com.pb.task.manager.model.User;
 import com.pb.task.manager.service.security.TokenHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.SocketUtils;
 
 import javax.annotation.PostConstruct;
 import java.awt.*;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 
 /**
@@ -55,7 +59,9 @@ public class ExportService {
     private static HttpTransport HTTP_TRANSPORT;
 
     private static final List<String> SCOPES =
-            Arrays.asList(DriveScopes.DRIVE_FILE);
+            Arrays.asList(DriveScopes.DRIVE);
+
+    private static final String viewUrl = "https://docs.google.com/spreadsheets/d/";
 
     @Autowired
     private UserDao userDao;
@@ -107,18 +113,31 @@ public class ExportService {
         return flow.createAndStoreCredential(response, String.valueOf(id));
     }
 
-    private Drive getDriveService(Long id) throws IOException {
-        Credential credential = authorize(id);
+    private Drive getDriveService(Credential credential) throws IOException {
+
         return new Drive.Builder(
                 HTTP_TRANSPORT, JSON_FACTORY, credential)
                 .setApplicationName(APPLICATION_NAME)
                 .build();
     }
 
-    public void createFile() throws IOException {
+    public String createFile() throws IOException {
         User user = userDao.getCurrentUser();
-        Drive drive = getDriveService(user.getId());
-        //drive.files().create()
+        Credential credential = authorize(user.getId());
+
+        Drive drive = getDriveService(credential);
+        File fileMetadata = new File();
+        fileMetadata.setName("1");
+        fileMetadata.setMimeType("application/vnd.google-apps.spreadsheet");
+        //java.io.File mediaFile = new java.io.File("report" + UUID.randomUUID() +  ".xls");//.createTempFile
+        java.io.File mediaFile = new java.io.File("D:\\1.xlsx");
+        InputStreamContent mediaContent =
+                new InputStreamContent("application/vnd.ms-excel",
+                        new BufferedInputStream(new FileInputStream(mediaFile)));
+        mediaContent.setLength(mediaFile.length());
+        File response = drive.files().create(fileMetadata, mediaContent).setFields("id").execute();
+        System.out.println("Response id:" + response.getId());
+        return viewUrl + response.getId() + "/edit";
     }
 
 }

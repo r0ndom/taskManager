@@ -1,5 +1,7 @@
 package com.pb.task.manager.service.security;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -11,6 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * Created by Mike on 3/10/2016.
  */
 @Component
+@Scope(value="session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class TokenHandler {
 
     private String token;

@@ -20,7 +20,7 @@ public class ExportController {
 
     @RequestMapping(value = "/export", method = RequestMethod.POST)
     public String export() throws IOException {
-        service.createFile();
-        return "redirect:/app/tasks/";
+        String url = service.createFile();
+        return "redirect:" + url;
     }
 }
