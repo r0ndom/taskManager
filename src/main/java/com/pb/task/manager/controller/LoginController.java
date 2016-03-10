@@ -1,5 +1,6 @@
 package com.pb.task.manager.controller;
 
+import com.pb.task.manager.service.security.TokenHandler;
 import com.pb.task.manager.util.MessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 public class LoginController {
 
@@ -16,6 +19,9 @@ public class LoginController {
     private MessageUtils messageUtils;
 
     private static final String LOGIN = "login/login";
+
+    @Autowired
+    private TokenHandler tokenHandler;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String redirectToLogin() {
@@ -34,8 +40,11 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/auth", method = RequestMethod.GET)
-    public String googleAuth() {
-        return "login/authGoogle";
+    public String googleAuth(HttpServletRequest request) {
+        String error = request.getParameter("error");
+        String code = request.getParameter("code");
+        tokenHandler.setData(code, error);
+        return "redirect:/app/tasks/";
     }
 
 }

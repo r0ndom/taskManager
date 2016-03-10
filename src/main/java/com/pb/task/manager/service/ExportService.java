@@ -17,23 +17,30 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.pb.task.manager.dao.UserDao;
 import com.pb.task.manager.model.User;
+import com.pb.task.manager.service.security.TokenHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.awt.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * Created by Mednikov on 09.03.2016.
  */
 @Service
 public class ExportService {
+
+    @Autowired
+    private TokenHandler handler;
 
     private static final String APPLICATION_NAME = "taskmanager-1238";
 
@@ -65,38 +72,39 @@ public class ExportService {
 
     private Credential authorize(Long id) throws IOException {
 
-//        GoogleCredential credential = GoogleCredential.fromStream(new FileInputStream("client_secret.json"))
-//                .createScoped(Collections.singleton(DriveScopes.DRIVE_FILE));
-        // Load client secrets.
         InputStream in = ExportService.class.getResourceAsStream("/client_secret.json");
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
-        // Build flow and trigger user authorization request.
         GoogleAuthorizationCodeFlow flow =
                 new GoogleAuthorizationCodeFlow.Builder(
                         HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
                         .setDataStoreFactory(DATA_STORE_FACTORY)
                         .setAccessType("offline")
                         .build();
-//        Credential credential = new AuthorizationCodeInstalledApp(
-//                flow, new LocalServerReceiver()).authorize(String.valueOf(id));
         Credential credential = flow.loadCredential(String.valueOf(id));
         if (credential != null
                 && (credential.getRefreshToken() != null || credential.getExpiresInSeconds() > 60)) {
             return credential;
         }
-        // open in browser
-        String redirectUri = "";
+        String redirectUri = "http://localhost:8080/auth";
         AuthorizationCodeRequestUrl authorizationUrl =
                 flow.newAuthorizationUrl().setRedirectUri(redirectUri);
-        // receive authorization code and exchange it for an access token
-        String code = receiver.waitForCode();
+        try {
+            if (Desktop.isDesktopSupported()) {
+                Desktop desktop = Desktop.getDesktop();
+                if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                    System.out.println("Attempting to open that address in the default browser now...");
+                    desktop.browse(URI.create(authorizationUrl.build()));
+                }
+            }
+        } catch (IOException e) {
+        } catch (InternalError e) {
+
+        }
+        String code = handler.getToken();
         TokenResponse response = flow.newTokenRequest(code).setRedirectUri(redirectUri).execute();
-        // store credential and return it
-        return flow.createAndStoreCredential(response, userId);
-        //Credential credential = new GoogleCredential();
-        return credential;
+        return flow.createAndStoreCredential(response, String.valueOf(id));
     }
 
     private Drive getDriveService(Long id) throws IOException {
