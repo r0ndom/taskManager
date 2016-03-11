@@ -20,7 +20,13 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import com.google.gdata.client.spreadsheet.SpreadsheetQuery;
+import com.google.gdata.client.spreadsheet.SpreadsheetService;
+import com.google.gdata.data.spreadsheet.*;
+import com.google.gdata.util.ServiceException;
 import com.pb.task.manager.dao.UserDao;
+import com.pb.task.manager.model.GenerateData;
+import com.pb.task.manager.model.TaskData;
 import com.pb.task.manager.model.User;
 import com.pb.task.manager.service.security.TokenHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +36,11 @@ import org.springframework.util.SocketUtils;
 import javax.annotation.PostConstruct;
 import java.awt.*;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URI;
-import java.util.Arrays;
-import java.util.Collections;
+import java.net.URL;
+import java.util.*;
 import java.util.List;
-import java.util.UUID;
 import java.util.logging.Level;
 
 /**
@@ -59,7 +65,7 @@ public class ExportService {
     private static HttpTransport HTTP_TRANSPORT;
 
     private static final List<String> SCOPES =
-            Arrays.asList(DriveScopes.DRIVE);
+            Arrays.asList(DriveScopes.DRIVE, "https://spreadsheets.google.com/feeds/");
 
     private static final String viewUrl = "https://docs.google.com/spreadsheets/d/";
 
@@ -121,15 +127,12 @@ public class ExportService {
                 .build();
     }
 
-    public String createFile() throws IOException {
-        User user = userDao.getCurrentUser();
-        Credential credential = authorize(user.getId());
-
+    private GenerateData createFile(Credential credential) throws IOException {
+        String name = "report" + new Date();
         Drive drive = getDriveService(credential);
         File fileMetadata = new File();
-        fileMetadata.setName("1");
+        fileMetadata.setName(name);
         fileMetadata.setMimeType("application/vnd.google-apps.spreadsheet");
-        //java.io.File mediaFile = new java.io.File("report" + UUID.randomUUID() +  ".xls");//.createTempFile
         java.io.File mediaFile = new java.io.File("D:\\1.xlsx");
         InputStreamContent mediaContent =
                 new InputStreamContent("application/vnd.ms-excel",
@@ -137,7 +140,86 @@ public class ExportService {
         mediaContent.setLength(mediaFile.length());
         File response = drive.files().create(fileMetadata, mediaContent).setFields("id").execute();
         System.out.println("Response id:" + response.getId());
-        return viewUrl + response.getId() + "/edit";
+        GenerateData data = new GenerateData();
+        data.setId(response.getId());
+        data.setName(name);
+        return data;
     }
 
+    private String redirectUrl(String id) {
+        return viewUrl + id + "/edit";
+    }
+
+    public String generateReport(List<TaskData> data) throws IOException, ServiceException {
+        User user = userDao.getCurrentUser();
+        Credential credential = authorize(user.getId());
+        GenerateData generateData = createFile(credential);
+        String id = generateData.getId();
+        SpreadsheetService service =
+                new SpreadsheetService("MySpreadsheetIntegration");
+        service.setProtocolVersion(SpreadsheetService.Versions.V3);
+        service.setOAuth2Credentials(credential);
+
+        SpreadsheetEntry spreadsheet = getSpreadsheet(service, generateData.getName());
+        System.out.println(spreadsheet.getTitle().getPlainText());
+        WorksheetFeed worksheetFeed = service.getFeed(
+                spreadsheet.getWorksheetFeedUrl(), WorksheetFeed.class);
+        List<WorksheetEntry> worksheets = worksheetFeed.getEntries();
+        WorksheetEntry worksheet = worksheets.get(0);
+
+        URL listFeedUrl = worksheet.getListFeedUrl();
+        ListFeed listFeed = service.getFeed(listFeedUrl, ListFeed.class);
+
+        // Send the new row to the API for insertion.
+        for (TaskData td : data) {
+            Map<String, String> rowValues = td.getParams();
+            ListEntry row = createRow(rowValues);
+            //service.insert(listFeedUrl, row);
+            listFeed.insert(row);
+        }
+        return redirectUrl(id);
+    }
+
+    private ListEntry createRow(Map<String, String> rowValues) {
+        ListEntry row = new ListEntry();
+        for (String columnName : rowValues.keySet()) {
+            String value = rowValues.get(columnName);
+            row.getCustomElements().setValueLocal(columnName,
+                    value);
+        }
+        return row;
+    }
+
+    private SpreadsheetEntry getSpreadsheet(SpreadsheetService service, String sheetName) throws IllegalStateException{
+        try {
+
+            SpreadsheetQuery spreadsheetQuery = new SpreadsheetQuery(
+                    getSheetsServiceUrl());
+            spreadsheetQuery.setTitleQuery(sheetName);
+            spreadsheetQuery.setTitleExact(true);
+            SpreadsheetFeed spreadsheet = service.getFeed(spreadsheetQuery,
+                    SpreadsheetFeed.class);
+
+            if (spreadsheet.getEntries() != null
+                    && spreadsheet.getEntries().size() == 1) {
+                return spreadsheet.getEntries().get(0);
+            } else {
+                throw new IllegalStateException();
+            }
+        } catch (Exception ex) {
+
+        }
+        return null;
+    }
+
+    public URL getSheetsServiceUrl() {
+        URL SPREADSHEET_FEED_URL = null;
+        try {
+            SPREADSHEET_FEED_URL = new URL(
+                    "https://spreadsheets.google.com/feeds/spreadsheets/private/full");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return SPREADSHEET_FEED_URL;
+    }
 }
