@@ -162,7 +162,7 @@ public class ActivitiService {
     }
 
     private Map<String, Object> getParamsByExecutionId(String id) {
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new LinkedHashMap<>();
         Task task = taskService.createTaskQuery().executionId(id).singleResult();
         params.put("state", task.getFormKey());
         params.putAll(taskService.getVariables(task.getId()));

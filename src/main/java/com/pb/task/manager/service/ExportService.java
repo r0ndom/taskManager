@@ -29,6 +29,8 @@ import com.pb.task.manager.model.GenerateData;
 import com.pb.task.manager.model.TaskData;
 import com.pb.task.manager.model.User;
 import com.pb.task.manager.service.security.TokenHandler;
+import com.sun.javafx.tk.*;
+import com.sun.javafx.tk.Toolkit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.SocketUtils;
@@ -167,15 +169,21 @@ public class ExportService {
         List<WorksheetEntry> worksheets = worksheetFeed.getEntries();
         WorksheetEntry worksheet = worksheets.get(0);
 
-        URL listFeedUrl = worksheet.getListFeedUrl();
-        ListFeed listFeed = service.getFeed(listFeedUrl, ListFeed.class);
+        URL cellFeedUrl = worksheet.getCellFeedUrl();
+        CellFeed cellFeed = service.getFeed(cellFeedUrl, CellFeed.class);
 
-        // Send the new row to the API for insertion.
-        for (TaskData td : data) {
-            Map<String, String> rowValues = td.getParams();
-            ListEntry row = createRow(rowValues);
-            //service.insert(listFeedUrl, row);
-            listFeed.insert(row);
+        // TODO: Update cell values more intelligently.
+        Integer i = 0, j = 0;
+        for (TaskData taskData : data) {
+            i++;
+            j = 0;
+            Map<String, String> map = taskData.getParams();
+            for (String key : map.keySet()) {
+                String value = map.get(key);
+                CellEntry cellEntry= new CellEntry (i, ++j, value);
+                cellFeed.insert(cellEntry);
+            }
+
         }
         return redirectUrl(id);
     }
@@ -184,7 +192,7 @@ public class ExportService {
         ListEntry row = new ListEntry();
         for (String columnName : rowValues.keySet()) {
             String value = rowValues.get(columnName);
-            row.getCustomElements().setValueLocal(columnName,
+            row.getCustomElements().setValueLocal("A1",
                     value);
         }
         return row;
